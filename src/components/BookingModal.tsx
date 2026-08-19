@@ -1,278 +1,338 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Clock, User, Mail, Phone, Car, CheckCircle } from "lucide-react";
+import { CheckCircle, ChevronDown } from "lucide-react";
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+/* â”€â”€â”€ Reusable smooth custom dropdown â”€â”€â”€ */
+interface CustomSelectProps {
+  placeholder: string;
+  options: string[];
+  value: string;
+  onChange: (val: string) => void;
+  required?: boolean;
+}
+
+function CustomSelect({ placeholder, options, value, onChange, required }: CustomSelectProps) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative w-full select-none">
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={`w-full flex items-center justify-between px-3 py-2.5 bg-white border text-sm transition-colors cursor-pointer ${
+          open ? "border-zinc-600" : "border-zinc-300 hover:border-zinc-400"
+        } ${value ? "text-zinc-900" : "text-zinc-400"}`}
+      >
+        <span className="truncate">{value || placeholder}</span>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+          className="ml-2 flex-shrink-0 text-zinc-500"
+        >
+          <ChevronDown size={14} />
+        </motion.span>
+      </button>
+
+      {/* Hidden native input for form validation */}
+      {required && (
+        <input
+          type="text"
+          required
+          readOnly
+          value={value}
+          tabIndex={-1}
+          className="absolute inset-0 opacity-0 pointer-events-none"
+          aria-hidden
+        />
+      )}
+
+      {/* Smooth dropdown panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            initial={{ opacity: 0, y: -6, scaleY: 0.96 }}
+            animate={{ opacity: 1, y: 0, scaleY: 1 }}
+            exit={{ opacity: 0, y: -6, scaleY: 0.96 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            style={{ transformOrigin: "top" }}
+            className="absolute z-50 left-0 right-0 top-[calc(100%+2px)] bg-white border border-zinc-200 shadow-xl max-h-52 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
+            {options.map((opt) => (
+              <li key={opt}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChange(opt);
+                    setOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2.5 text-sm transition-colors cursor-pointer ${
+                    value === opt
+                      ? "bg-zinc-900 text-white"
+                      : "text-zinc-800 hover:bg-zinc-100"
+                  }`}
+                >
+                  {opt}
+                </button>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* â”€â”€â”€ Data â”€â”€â”€ */
+const carManufacturers = [
+  "Alfa Romeo", "Aston Martin", "Audi", "Bentley", "BMW", "Bugatti",
+  "Cadillac", "Chevrolet", "Dodge", "Ferrari", "Ford", "Honda",
+  "Hyundai", "Jaguar", "Jeep", "Kia", "Lamborghini", "Land Rover",
+  "Lexus", "Maserati", "McLaren", "Mercedes-Benz", "Nissan", "Porsche",
+  "Range Rover", "Rolls-Royce", "Subaru", "Tesla", "Toyota", "Volkswagen",
+];
+
+const modelYears = ["2020", "2021", "2022", "2023", "2024", "2025", "2026"];
+
+const requiredServices = [
+  "Engine & Transmission",
+  "Brakes, Suspension & AC Repair",
+  "Body & Accident Repairs",
+  "Paint & Exterior Care",
+  "Performance & Upgrades",
+  "Customer Support Services",
+];
+
+/* â”€â”€â”€ Main modal â”€â”€â”€ */
 export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
-    service: "",
-    date: "",
-    timeSlot: "",
-    vehicleModel: "",
-    vehicleYear: "",
-    instructions: "",
+    email: "",
+    city: "",
+    manufacturer: "",
+    modelNumber: "",
+    registrationNumber: "",
+    requiredService: "",
+    comments: "",
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Reset form when modal is closed or opened
+  const wordCount = formData.comments.trim().split(/\s+/).filter(Boolean).length;
+
   useEffect(() => {
     if (isOpen) {
-      setIsSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        service: "",
-        date: "",
-        timeSlot: "",
-        vehicleModel: "",
-        vehicleYear: "",
-        instructions: "",
-      });
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API request
-    setTimeout(() => {
-      setIsSubmitted(true);
-    }, 600);
+    setTimeout(() => setIsSubmitted(true), 400);
   };
 
-  const services = [
-    "Exterior Detailing",
-    "Interior Detailing",
-    "Ceramic Coating",
-    "Paint Correction",
-    "Full Detail Package",
-  ];
-
-  const timeSlots = ["08:00 AM", "10:00 AM", "12:00 PM", "02:00 PM", "04:00 PM"];
+  const inputClass =
+    "w-full px-3 py-2.5 bg-white border border-zinc-300 text-zinc-900 placeholder-zinc-400 text-sm focus:outline-none focus:border-zinc-600 transition-colors";
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop Overlay */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          {/* Blurred dark backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md"
           />
 
-          {/* Modal Container */}
+          {/* White Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", duration: 0.5 }}
-            className="bg-zinc-950 border border-zinc-800 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative z-10 font-sans text-white no-scrollbar"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="relative z-10 bg-white w-full max-w-4xl max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl"
           >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 text-gray-400 hover:text-orange-500 transition-colors p-1 rounded-full bg-zinc-900 hover:bg-zinc-800 cursor-pointer"
-              aria-label="Close"
-            >
-              <X size={20} />
-            </button>
-
             {!isSubmitted ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <h2 className="text-2xl font-bold font-orbitron text-white tracking-wide">
-                    BOOK YOUR APPOINTMENT
+              <form onSubmit={handleSubmit} className="px-10 py-10">
+
+                {/* Header */}
+                <div className="flex items-start justify-between mb-8">
+                  <h2 className="text-[38px] font-bold font-orbitron text-zinc-900 leading-tight">
+                    Book Service Slot
                   </h2>
-                  <p className="text-gray-400 text-sm mt-1">
-                    Fill out the form below to schedule your premium car detailing service.
-                  </p>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close"
+                    className="text-zinc-500 hover:text-zinc-900 transition-colors text-xl leading-none cursor-pointer mt-0.5"
+                  >
+                    <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 1L1 15M14 15L1 1" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+
+                  </button>
                 </div>
 
-                {/* Section 1: Personal Details */}
-                <div className="space-y-4">
-                  <h3 className="text-xs uppercase tracking-wider text-orange-500 font-semibold font-orbitron border-b border-zinc-800 pb-1">
-                    1. Personal Information
+                {/* â”€â”€ Personal Details â”€â”€ */}
+                <div className="mb-7">
+                  <h3 className="text-xl font-bold font-orbitron text-zinc-900 border-b border-zinc-300 pb-2 mb-5">
+                    Personal Details
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                      <input
-                        type="text"
-                        placeholder="Full Name"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm"
-                      />
-                    </div>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                      <input
-                        type="email"
-                        placeholder="Email Address"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm"
-                      />
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <input
+                      type="text"
+                      placeholder="Your Name *"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className={inputClass}
+                    />
                     <input
                       type="tel"
-                      placeholder="Phone Number"
+                      placeholder="Phone Number *"
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm"
+                      className={inputClass}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className={inputClass}
+                    />
+                    <input
+                      type="text"
+                      placeholder="City"
+                      value={formData.city}
+                      onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                      className={inputClass}
                     />
                   </div>
                 </div>
 
-                {/* Section 2: Service Details */}
-                <div className="space-y-4">
-                  <h3 className="text-xs uppercase tracking-wider text-orange-500 font-semibold font-orbitron border-b border-zinc-800 pb-1">
-                    2. Service & Scheduling
+                {/* â”€â”€ Car Details â”€â”€ */}
+                <div className="mb-7">
+                  <h3 className="text-xl font-bold font-orbitron text-zinc-900 border-b border-zinc-300 pb-2 mb-5">
+                    Car Details
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <select
-                        required
-                        value={formData.service}
-                        onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm appearance-none cursor-pointer"
-                      >
-                        <option value="" disabled>Select Detailing Service</option>
-                        {services.map((service) => (
-                          <option key={service} value={service} className="bg-zinc-950">
-                            {service}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="relative">
-                      <input
-                        type="date"
-                        required
-                        value={formData.date}
-                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm cursor-pointer"
-                      />
-                    </div>
+
+                  {/* Row 1: Manufacturer + Model Year */}
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <CustomSelect
+                      placeholder="Car Manufacturer"
+                      options={carManufacturers}
+                      value={formData.manufacturer}
+                      onChange={(val) => setFormData({ ...formData, manufacturer: val })}
+                    />
+                    <CustomSelect
+                      placeholder="Model Number"
+                      options={modelYears}
+                      value={formData.modelNumber}
+                      onChange={(val) => setFormData({ ...formData, modelNumber: val })}
+                    />
                   </div>
 
-                  {/* Time Slot Selection */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-gray-400 flex items-center gap-1.5">
-                      <Clock size={14} /> Select Preferred Time Slot:
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {timeSlots.map((slot) => (
-                        <button
-                          key={slot}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, timeSlot: slot })}
-                          className={`px-4 py-2 text-xs font-semibold rounded transition-all border cursor-pointer ${
-                            formData.timeSlot === slot
-                              ? "bg-orange-500 text-black border-orange-500 shadow-md shadow-orange-500/20"
-                              : "bg-zinc-900 text-white border-zinc-800 hover:border-orange-500 hover:text-orange-500"
-                          }`}
-                        >
-                          {slot}
-                        </button>
-                      ))}
-                    </div>
+                  {/* Row 2: Registration + Required Service */}
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <input
+                      type="text"
+                      placeholder="Registration Number"
+                      value={formData.registrationNumber}
+                      onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
+                      className={inputClass}
+                    />
+                    <CustomSelect
+                      placeholder="Required Service *"
+                      options={requiredServices}
+                      value={formData.requiredService}
+                      onChange={(val) => setFormData({ ...formData, requiredService: val })}
+                      required
+                    />
                   </div>
-                </div>
 
-                {/* Section 3: Vehicle Info */}
-                <div className="space-y-4">
-                  <h3 className="text-xs uppercase tracking-wider text-orange-500 font-semibold font-orbitron border-b border-zinc-800 pb-1">
-                    3. Vehicle Information
-                  </h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="col-span-2 relative">
-                      <Car className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                      <input
-                        type="text"
-                        placeholder="Vehicle Make & Model (e.g. Audi R8)"
-                        required
-                        value={formData.vehicleModel}
-                        onChange={(e) => setFormData({ ...formData, vehicleModel: e.target.value })}
-                        className="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm"
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="number"
-                        placeholder="Year"
-                        required
-                        min="1950"
-                        max="2027"
-                        value={formData.vehicleYear}
-                        onChange={(e) => setFormData({ ...formData, vehicleYear: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm"
-                      />
-                    </div>
+                  {/* Comments textarea with word counter */}
+                  <div className="relative">
+                    <textarea
+                      rows={4}
+                      placeholder="Comments or Special requirements"
+                      value={formData.comments}
+                      onChange={(e) => {
+                        const words = e.target.value.trim().split(/\s+/).filter(Boolean);
+                        if (words.length <= 250 || e.target.value.length < formData.comments.length) {
+                          setFormData({ ...formData, comments: e.target.value });
+                        }
+                      }}
+                      className="w-full px-3 pt-2.5 pb-6 bg-white border border-zinc-300 text-zinc-900 placeholder-zinc-400 text-sm focus:outline-none focus:border-zinc-600 transition-colors resize-none"
+                    />
+                    <span className="absolute bottom-2 right-3 text-[10px] text-zinc-400 pointer-events-none">
+                      {wordCount}/250 words
+                    </span>
                   </div>
                 </div>
 
-                {/* Section 4: Special Instructions */}
-                <div className="space-y-2">
-                  <label className="text-xs text-gray-400">Special Instructions / Requirements (Optional):</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Any special instructions or detailing requirements..."
-                    value={formData.instructions}
-                    onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-zinc-900 border border-zinc-800 rounded-md text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all text-sm resize-none"
-                  />
+                {/* Submit Button */}
+                <div className="flex justify-center mt-2">
+                  <button
+                    type="submit"
+                    className="px-14 py-3 bg-zinc-900 hover:bg-black text-white text-sm font-semibold transition-colors cursor-pointer"
+                  >
+                    Submit
+                  </button>
                 </div>
-
-                {/* Submit Action */}
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-orange-500 hover:bg-orange-600 active:scale-[0.99] text-black font-bold font-orbitron rounded-md transition-all uppercase tracking-wider text-sm shadow-lg shadow-orange-500/20 cursor-pointer"
-                >
-                  Confirm Appointment
-                </button>
               </form>
             ) : (
-              /* Success view state */
+              /* Success state */
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center py-10 text-center space-y-4"
+                className="flex flex-col items-center justify-center py-16 px-10 text-center space-y-4"
               >
-                <CheckCircle size={64} className="text-orange-500" />
-                <h3 className="text-2xl font-bold font-orbitron tracking-wide text-white">
-                  BOOKING REQUEST SENT!
+                <CheckCircle size={56} className="text-zinc-900" />
+                <h3 className="text-xl font-bold text-zinc-900">
+                  Booking Request Sent!
                 </h3>
-                <p className="text-gray-400 text-sm max-w-md">
-                  Thank you, <span className="text-white font-semibold">{formData.name}</span>. We have received your booking request for a <span className="text-white font-semibold">{formData.service}</span> on <span className="text-white font-semibold">{formData.date}</span>.
-                </p>
-                <p className="text-gray-500 text-xs mt-2">
-                  Our team will contact you at {formData.phone} shortly to confirm your time slot.
+                <p className="text-zinc-500 text-sm max-w-xs">
+                  Thank you,{" "}
+                  <span className="text-zinc-900 font-semibold">{formData.name}</span>.
+                  We&apos;ve received your request and will be in touch shortly.
                 </p>
                 <button
                   onClick={onClose}
-                  className="mt-6 px-6 py-2 border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-black rounded transition-all font-bold font-orbitron text-xs tracking-wider cursor-pointer"
+                  className="mt-4 px-10 py-2.5 bg-zinc-900 hover:bg-black text-white text-sm font-semibold transition-colors cursor-pointer"
                 >
-                  Close Window
+                  Close
                 </button>
               </motion.div>
             )}

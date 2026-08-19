@@ -32,7 +32,7 @@ interface TypographyProps {
   /** For the "btn" variant: disable the button */
   disabled?: boolean;
   /** Render as a different HTML tag (overrides the default per-variant tag) */
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 // ─────────────────────────────────────────────
@@ -44,23 +44,22 @@ const variantStyles: Record<TypographyVariant, string> = {
    * Large, bold, Orbitron, uppercase – used for primary section headings.
    */
   mainheading:
-    "text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-normal font-orbitron " +
-    "text-white leading-[1.1] tracking-wide uppercase",
+    "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal font-orbitron leading-tight pb-1 md:pb-2 " +
+    "text-white",
 
   /**
    * subheading
    * Medium-weight, slightly smaller – for secondary headings / section labels.
    */
   subheading:
-    "text-[20px] sm:text-[30px] md:text-[40px] font-normal font-orbitron " +
-    "text-orange-500 leading-snug tracking-wider uppercase",
+    "text-[40px] sm:text-[30px] md:text-[45px] font-normal font-orbitron leading-tight pb-1 md:pb-2 ",
 
   /**
    * smallhead
    * Small caps-style label – for eyebrow text or card titles.
    */
   smallhead:
-    "text-xs sm:text-lg " ,
+    "text-lg sm:text-lg " ,
 
   /**
    * description
@@ -68,19 +67,19 @@ const variantStyles: Record<TypographyVariant, string> = {
    * Font: Be Vietnam Pro
    */
   description:
-    "text-base sm:text-lg md:text-sm font-light font-sans leading-relaxed text-gray-300",
+    "text-base sm:text-lg md:text-[16px] font-light font-sans leading-relaxed text-gray-300",
 
   /**
    * btn
    * Button label typography – Be Vietnam Pro font
    */
-  btn: "text-xs md:text-sm font-medium font-sans ",
+  btn: "text-sm md:text-md font-medium font-sans ",
 };
 
 // ─────────────────────────────────────────────
 //  Default HTML element per variant
 // ─────────────────────────────────────────────
-const defaultTag: Record<TypographyVariant, keyof JSX.IntrinsicElements> = {
+const defaultTag: Record<TypographyVariant, keyof React.JSX.IntrinsicElements> = {
   mainheading: "h1",
   subheading: "h2",
   smallhead: "h3",

@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${orbitron.variable} ${beVietnamPro.variable} h-full antialiased`}
     >
       <Script src="/smoothScroll/smoothScroll.js" />
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-white font-sans">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#1D1D1B] text-white font-sans">{children}</body>
     </html>
   );
 }
