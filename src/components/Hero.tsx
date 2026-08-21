@@ -153,7 +153,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       {/* Bottom Bar: Navigation Lines & Scroll Indicator */}
       <div className="relative z-10 w-full container mx-auto px-4 sm:px-6 lg:px-20 pb-10 flex items-center justify-between">
         {/* Carousel Indicators */}
-        <div className="flex gap-2 sm:gap-3 md:absolute md:bottom-10 md:left-1/2 md:-translate-x-1/2 md:z-20">
+        <div className="flex gap-2 sm:gap-3 md:z-20">
           {CAROUSEL_IMAGES.map((_, idx) => {
             const isActive = idx === currentIndex;
             const isPast = idx < currentIndex;
