@@ -88,7 +88,7 @@ export default function WhyChooseUs() {
       tabName: "Global Tooling",
       heading: "Global Tooling",
       description: "Every facility is equipped with specialized tech sourced from China, Taiwan, and Germany. ",
-      image: "/landingpage/carousel1.webp",
+      image: "/landingpage/newcarousel1.png",
       mobileImage: "/landingpage/mobilecarousel1.webp",
     },
     {
@@ -96,7 +96,7 @@ export default function WhyChooseUs() {
       tabName: "Uniformed Expertise",
       heading: "Uniformed Expertise",
       description: 'No matter which branch you visit, the technical "B&C Carmax Protocol" remains identical.',
-      image: "/landingpage/carousel2.webp",
+      image: "/landingpage/newcarousel2.png",
       mobileImage: "/landingpage/mobilecarousel2.webp",
     },
     {
@@ -104,7 +104,7 @@ export default function WhyChooseUs() {
       tabName: "Transparent Logistics",
       heading: "Transparent Logistics",
       description: "Free pickup and drop-off across Mangalore, ensuring your convenience is our priority.",
-      image: "/landingpage/carousel3.webp",
+      image: "/landingpage/newcarousel3.png",
       mobileImage: "/landingpage/mobilecarousel3.webp",
     },
     {
@@ -112,7 +112,7 @@ export default function WhyChooseUs() {
       tabName: "Standardised Quality",
       heading: "Standardised Quality",
       description: "Free pickup and drop-off across Mangalore, ensuring your convenience is our priority.",
-      image: "/landingpage/carousel4.webp",
+      image: "/landingpage/newcarousel4.png",
       mobileImage: "/landingpage/mobilecarousel4.webp",
     },
   ];
