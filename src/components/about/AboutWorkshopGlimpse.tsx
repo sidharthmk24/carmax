@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export default function AboutWorkshopGlimpse() {
   return (
-    <section className="py-22 bg-[#1D1D1B] text-white">
+    <section className=" py-18 md:py-22 bg-[#1D1D1B] text-white">
       <div className="container mx-auto px-4 lg:px-20 max-w-[1400px]">
         
         <div className="flex flex-col items-center mb-12">
@@ -33,7 +33,7 @@ export default function AboutWorkshopGlimpse() {
         >
           {/* Placeholder Background */}
           <Image 
-            src="/landingpage/aboutbg.webp" 
+            src="/about/placeholder.png" 
             alt="Workshop Glimpse" 
             fill 
             className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" 

@@ -47,7 +47,7 @@ export default function ServiceHeroSwiper() {
     },
     {
       title: "Performance & Upgrades",
-      image: "/landingpage/service5.webp",
+      image: "/landingpage/newservice5.png",
       slug: "performance-upgrades",
     },
     {
@@ -168,7 +168,8 @@ export default function ServiceHeroSwiper() {
                                 }
                               : { duration: 0 }
                           }
-                          className="group relative w-full aspect-[9/14] sm:h-[520px] rounded-2xl md:rounded-sm overflow-hidden cursor-pointer bg-zinc-900"
+                          className="group relative w-full aspect-[9/14] sm:h-[520px] rounded-sm md:rounded-sm overflow-hidden cursor-pointer bg-transparent"
+                          style={{ WebkitMaskImage: "-webkit-radial-gradient(white, black)", transform: "translateZ(0)" }}
                         >
                           {/* Background Image */}
                           <Image

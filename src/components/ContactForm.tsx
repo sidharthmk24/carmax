@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Typography from "@/components/Typography";
 import SplitText from "@/components/shared/SplitText";
 
@@ -18,6 +18,7 @@ export default function ContactForm() {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,14 +136,19 @@ export default function ContactForm() {
                 <label className="text-xs text-zinc-400 font-sans mb-2 font-medium">
                   Phone <span className="text-[#ff5e00]">*</span>
                 </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="Enter your Phone Number"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="bg-transparent border border-zinc-800 focus:border-zinc-500 focus:outline-none text-white px-4 py-3.5 text-sm font-sans font-light rounded-none transition-colors"
-                />
+                <div className="flex border border-zinc-800 focus-within:border-zinc-500 transition-colors bg-transparent">
+                  <div className="flex items-center justify-center pl-4 pr-3 py-3.5 text-zinc-400 text-sm font-sans font-light border-r border-zinc-800 select-none">
+                    +91
+                  </div>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="Enter your Phone Number"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="bg-transparent w-full focus:outline-none text-white px-4 py-3.5 text-sm font-sans font-light rounded-none"
+                  />
+                </div>
               </div>
             </div>
 
@@ -190,29 +196,75 @@ export default function ContactForm() {
             </div>
 
             {/* Row 4: Service / Product Required */}
-            <div className="flex flex-col">
+            <div className="flex flex-col relative z-20">
               <label className="text-xs text-zinc-400 font-sans mb-2 font-medium">
                 Service / Product Required <span className="text-[#ff5e00]">*</span>
               </label>
-              <select
-                required
-                value={formData.serviceRequired}
-                onChange={(e) => setFormData({ ...formData, serviceRequired: e.target.value })}
-                className="bg-transparent border border-zinc-800 focus:border-zinc-500 focus:outline-none text-zinc-300 px-4 py-3.5 text-sm font-sans font-light rounded-none transition-colors cursor-pointer appearance-none"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>")`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "right 16px center",
-                  backgroundSize: "16px",
-                }}
-              >
-                <option value="" disabled>Select Service / Product you Require</option>
-                {servicesList.map((service, index) => (
-                  <option key={index} value={service} className="bg-zinc-950 text-white">
-                    {service}
-                  </option>
-                ))}
-              </select>
+              
+              <div className="relative w-full">
+                {/* Hidden input for HTML5 Validation */}
+                <input 
+                  type="text" 
+                  required 
+                  value={formData.serviceRequired} 
+                  onChange={() => {}} 
+                  className="absolute opacity-0 w-0 h-0 pointer-events-none" 
+                  tabIndex={-1} 
+                />
+
+                {/* Custom Dropdown Trigger */}
+                <div
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={`w-full bg-transparent border flex justify-between items-center px-4 py-3.5 text-sm font-sans font-light transition-colors cursor-pointer ${
+                    isDropdownOpen ? "border-zinc-500" : "border-zinc-800 hover:border-zinc-600"
+                  }`}
+                >
+                  <span className={formData.serviceRequired ? "text-white" : "text-zinc-500"}>
+                    {formData.serviceRequired || "Select Service / Product you Require"}
+                  </span>
+                  <motion.svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#a1a1aa"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    animate={{ rotate: isDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </motion.svg>
+                </div>
+
+                {/* Animated Dropdown Menu */}
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute top-full left-0 w-full mt-1 bg-[#151514] border border-zinc-800 shadow-xl z-50 py-2 max-h-60 overflow-y-auto"
+                    >
+                      {servicesList.map((service, index) => (
+                        <div
+                          key={index}
+                          onClick={() => {
+                            setFormData({ ...formData, serviceRequired: service });
+                            setIsDropdownOpen(false);
+                          }}
+                          className="px-4 py-3 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/50 cursor-pointer transition-colors"
+                        >
+                          {service}
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Row 5: Message */}

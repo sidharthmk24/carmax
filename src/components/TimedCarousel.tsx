@@ -19,12 +19,19 @@ function ProgressSegment({
   const scaleX = useTransform(progress, [start, end], [0, 1], { clamp: true });
 
   return (
-    <div className="relative w-full h-[1.5px] bg-white/20 overflow-hidden">
+    <motion.div 
+      variants={{
+        hidden: { scaleX: 0, opacity: 0 },
+        visible: { scaleX: 1, opacity: 1, transition: { duration: 0.8, ease: "easeInOut" } }
+      }}
+      style={{ originX: 0 }}
+      className="relative w-full h-[1.5px] bg-white/20 overflow-hidden"
+    >
       <motion.div
         className="absolute inset-0 bg-white origin-left"
         style={{ scaleX, willChange: "transform" }}
       />
-    </div>
+    </motion.div>
   );
 }
 
@@ -80,7 +87,7 @@ export default function WhyChooseUs() {
       num: "01",
       tabName: "Global Tooling",
       heading: "Global Tooling",
-      description: "Every facility is equipped with specialized tech sourced from China, Taiwan, and Germany.",
+      description: "Every facility is equipped with specialized tech sourced from China, Taiwan, and Germany. ",
       image: "/landingpage/carousel1.webp",
       mobileImage: "/landingpage/mobilecarousel1.webp",
     },
@@ -88,7 +95,7 @@ export default function WhyChooseUs() {
       num: "02",
       tabName: "Uniformed Expertise",
       heading: "Uniformed Expertise",
-      description: 'No matter which branch you visit, the technical "B&C Carmax Protocol" remains identical.',
+      description: 'No matter which branch you visit, the technical "B&C Carmax Protocol" remains identical.',
       image: "/landingpage/carousel2.webp",
       mobileImage: "/landingpage/mobilecarousel2.webp",
     },
@@ -96,7 +103,7 @@ export default function WhyChooseUs() {
       num: "03",
       tabName: "Transparent Logistics",
       heading: "Transparent Logistics",
-      description: "End-to-end tracking and real-time updates ensure your vehicle is always monitored during its care.",
+      description: "Free pickup and drop-off across Mangalore, ensuring your convenience is our priority.",
       image: "/landingpage/carousel3.webp",
       mobileImage: "/landingpage/mobilecarousel3.webp",
     },
@@ -104,7 +111,7 @@ export default function WhyChooseUs() {
       num: "04",
       tabName: "Standardised Quality",
       heading: "Standardised Quality",
-      description: "Rigorous multi-point inspections guarantee that every service meets our uncompromising global standards.",
+      description: "Free pickup and drop-off across Mangalore, ensuring your convenience is our priority.",
       image: "/landingpage/carousel4.webp",
       mobileImage: "/landingpage/mobilecarousel4.webp",
     },
@@ -167,6 +174,52 @@ export default function WhyChooseUs() {
     });
   };
 
+  const renderProgressSteps = () => (
+    steps.map((step, idx) => {
+      const isActive = idx === activeStep;
+      return (
+        <motion.div 
+          key={idx} 
+          variants={{
+            hidden: {},
+            visible: {}
+          }}
+          className="flex-1 flex flex-col gap-4 sm:gap-5"
+        >
+          <ProgressSegment progress={scaleX} index={idx} total={steps.length} />
+
+          <motion.button
+            variants={{
+              hidden: { opacity: 0, y: 15 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            onClick={() => handleTabClick(idx)}
+            className={`hidden md:block text-left cursor-pointer transition-all duration-300 ${
+              isActive ? "opacity-100" : "opacity-40 hover:opacity-70"
+            }`}
+          >
+            <div className="flex flex-col xl:flex-row xl:items-center gap-1 xl:gap-2">
+              <span
+                className={`font-semibold text-xs sm:text-[16px] transition-colors ${
+                  isActive ? "text-white" : "text-gray-300"
+                }`}
+              >
+                {step.num}
+              </span>
+              <span
+                className={`block text-[11px] sm:text-[16px] tracking-wide transition-colors font-light ${
+                  isActive ? "text-white" : "text-gray-300"
+                }`}
+              >
+                {step.tabName}
+              </span>
+            </div>
+          </motion.button>
+        </motion.div>
+      );
+    })
+  );
+
   return (
     <div ref={containerRef} id="why-choose-us" className="relative h-[400vh] bg-[#000000]">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-end">
@@ -183,8 +236,14 @@ export default function WhyChooseUs() {
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
 
         <div className="relative z-20 w-full container mx-auto px-4 sm:px-8 lg:px-20 pb-12 sm:pb-16 flex flex-col justify-end h-full">
-          <div className="mb-10 md:mb-14 sm:mb-20 max-w-xl min-h-[160px] flex flex-col justify-end">
-            <span className="block text-gray-300  font-orbitron tracking-wide text-sm sm:text-[13px] font-medium md:font-light mb-2 md:mb-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+            className="mb-10 md:mb-14 sm:mb-20 max-w-xl min-h-[160px] flex flex-col justify-end"
+          >
+            <span className="block text-gray-300  font-be-vietnam  text-sm sm:text-[16px] font-medium md:font-light mb-8 md:mb-8">
               Why Choose Us
             </span>
 
@@ -200,7 +259,7 @@ export default function WhyChooseUs() {
                 <SplitText
                   text={steps[activeStep].heading}
                   tag="h2"
-                  className="text-4xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-normal font-orbitron text-white leading-[1.15] pb-2 md:pb-3 mb-1 md:mb-2 tracking-wide"
+                  className="text-4xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-light font-be-vietnam text-white  pb-2 md:pb-3 mb-1 md:mb-2 "
                   delay={20}
                   duration={0.4}
                   ease="power3.out"
@@ -213,7 +272,7 @@ export default function WhyChooseUs() {
                 <SplitText
                   text={steps[activeStep].description}
                   tag="p"
-                  className="text-white md:text-gray-300 font-light leading-relaxed text-[15px] sm:text-[15px] max-w-md mt-2 md:mt-4"
+                  className="text-white md:text-gray-300 font-light leading-relaxed text-[15px] sm:text-[18px]  max-w-md mt-2 md:mt-4 "
                   delay={20}
                   duration={0.4}
                   ease="power3.out"
@@ -226,42 +285,39 @@ export default function WhyChooseUs() {
                 />
               </motion.div>
             </AnimatePresence>
-          </div>
+          </motion.div>
 
-          <div className="flex w-full gap-4 sm:gap-6">
-            {steps.map((step, idx) => {
-              const isActive = idx === activeStep;
-              return (
-                <div key={idx} className="flex-1 flex flex-col gap-4 sm:gap-5">
-                  <ProgressSegment progress={scaleX} index={idx} total={steps.length} />
+          {/* Desktop Version */}
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: { staggerChildren: 0.2, delayChildren: 0.1 }
+              }
+            }}
+            className="hidden md:flex w-full gap-4 sm:gap-6"
+          >
+            {renderProgressSteps()}
+          </motion.div>
 
-                  <button
-                    onClick={() => handleTabClick(idx)}
-                    className={`hidden md:block text-left cursor-pointer transition-all duration-300 ${
-                      isActive ? "opacity-100" : "opacity-40 hover:opacity-70"
-                    }`}
-                  >
-                    <div className="flex flex-col xl:flex-row xl:items-center gap-1 xl:gap-2">
-                      <span
-                        className={`font-semibold text-xs sm:text-[13px] transition-colors ${
-                          isActive ? "text-white" : "text-gray-300"
-                        }`}
-                      >
-                        {step.num}
-                      </span>
-                      <span
-                        className={`block text-[11px] sm:text-[13px] tracking-wide transition-colors font-light ${
-                          isActive ? "text-white" : "text-gray-300"
-                        }`}
-                      >
-                        {step.tabName}
-                      </span>
-                    </div>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          {/* Mobile Version */}
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "0px" }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: { staggerChildren: 0.2, delayChildren: 0.1 }
+              }
+            }}
+            className="flex md:hidden w-full gap-4 sm:gap-6"
+          >
+            {renderProgressSteps()}
+          </motion.div>
         </div>
       </div>
     </div>

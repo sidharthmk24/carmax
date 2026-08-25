@@ -8,6 +8,7 @@ import { servicesData } from "@/data/servicesData";
 import Typography from "./Typography";
 import Image from "next/image";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import Button from "./shared/Button";
 
 interface HeaderProps {
   onOpenBooking: () => void;
@@ -162,7 +163,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                   href="/services"
                   className="flex items-center gap-1 transition-colors duration-200 tracking-wide cursor-pointer py-2"
                 >
-                  <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname.startsWith('/services') ? 'text-orange-500' : 'text-white/90 hover:text-white'}`}>Services</Typography>
+                  <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname.startsWith('/services') ? 'text-orange-500' : 'text-white/90 hover:text-[#FE6700]'}`}>Services</Typography>
                   <ChevronDown size={14} className={`transition-transform duration-200 group-hover:rotate-180 ${pathname.startsWith('/services') ? 'text-orange-500' : 'text-white/90'}`} />
                 </Link>
                 <div className="absolute top-full left-0 mt-1 w-72 bg-[#1D1D1B]/95 border border-zinc-800/80 backdrop-blur-md rounded-sm py-2.5 shadow-2xl opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50 before:absolute before:content-[''] before:block before:top-[-10px] before:left-0 before:right-0 before:h-[10px] before:bg-transparent">
@@ -170,9 +171,9 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                     <Link
                       key={service.slug}
                       href={`/services/${service.slug}`}
-                      className="block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-zinc-900/60 hover:border-l-2 hover:border-orange-500 hover:pl-3.5 transition-all duration-200 font-sans"
+                      className="block px-4 py-2 text-sm text-white/70 hover:text-[#FE6700] hover:bg-zinc-900/60 hover:border-l-2 hover:border-orange-500 hover:pl-3.5 transition-all duration-200 font-sans"
                     >
-                      <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === `/services/${service.slug}` ? 'text-orange-500' : 'hover:text-white'}`}>{service.title}</Typography>
+                      <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === `/services/${service.slug}` ? 'text-orange-500' : 'hover:text-[#FE6700]'}`}>{service.title}</Typography>
                     </Link>
                   ))}
                 </div>
@@ -184,7 +185,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 href="/gallery"
                 className="transition-colors duration-200 tracking-wide"
               >
-                <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === '/gallery' ? 'text-orange-500' : 'text-white/90 hover:text-white'}`}>Gallery</Typography>
+                <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === '/gallery' ? 'text-orange-500' : 'text-white/90 hover:text-[#FE6700]'}`}>Gallery</Typography>
               </Link>
               <span className="text-white/30 select-none">|</span>
 
@@ -192,7 +193,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 href={getHref("about")}
                 className="transition-colors duration-200 tracking-wide"
               >
-                <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === '/about' ? 'text-orange-500' : 'text-white/90 hover:text-white'}`}>About Us</Typography>
+                <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === '/about' ? 'text-orange-500' : 'text-white/90 hover:text-[#FE6700]'}`}>About Us</Typography>
               </Link>
               <span className="text-white/30 select-none">|</span>
 
@@ -200,43 +201,46 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 href="/contact-us"
                 className="transition-colors duration-200 tracking-wide"
               >
-                <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === '/contact-us' ? 'text-orange-500' : 'text-white/90 hover:text-white'}`}>Contact Us</Typography>
+                <Typography variant="description" className={`font-light transition-colors duration-200 tracking-wider ${pathname === '/contact-us' ? 'text-orange-500' : 'text-white/90 hover:text-[#FE6700]'}`}>Contact Us</Typography>
               </Link>
-              <span className="text-white/30 select-none">|</span>
+              {/* <span className="text-white/30 select-none">|</span> */}
               
               {/* Visit Shop Link with Icon */}
-              <Link
+              {/* <Link
                 href={getHref("#shop")}
                 className="flex items-center transition-colors duration-200 tracking-wide group"
               >
-                <ShoppingCart size={16} className="mr-2 text-white/70 group-hover:text-white transition-colors" />
-                <Typography variant="description" className="text-white/90 hover:text-white font-light transition-colors duration-200 tracking-wider">Visit Shop</Typography>
-              </Link>
+                <ShoppingCart size={16} className="mr-2 text-white/70 group-hover:text-[#FE6700] transition-colors" />
+                <Typography variant="description" className="text-white/90 hover:text-[#FE6700] font-light transition-colors duration-200 tracking-wider">Visit Shop</Typography>
+              </Link> */}
             </nav>
 
             {/* Book Service Button (Desktop) */}
             <div>
-              <button
+              <Button
+                variant="primary"
                 onClick={onOpenBooking}
-                className="group flex items-center justify-center gap-1.5 bg-white text-black px-5 py-2.5 text-[15px] font-semibold hover:bg-gray-100 transition-colors duration-300 cursor-pointer"
+                rightIcon={
+                  <span className="text-black inline-flex items-center transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </span>
+                }
               >
                 Book Service Slot
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                >
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -270,7 +274,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
             <motion.div variants={itemVariants} className="w-full border-t border-white/20 pt-6 flex justify-center mb-10 relative">
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-white hover:text-gray-300 focus:outline-none cursor-pointer transition-transform hover:scale-110"
+                className="text-white hover:text-[#FE6700] focus:outline-none cursor-pointer transition-transform hover:scale-110"
                 aria-label="Close menu"
               >
                 <X size={32} strokeWidth={1} />
@@ -282,7 +286,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 <Link
                   href="/services"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname.startsWith('/services') ? 'text-orange-500' : 'text-white hover:text-gray-300'}`}
+                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname.startsWith('/services') ? 'text-orange-500' : 'text-white hover:text-[#FE6700]'}`}
                 >
                   Services
                 </Link>
@@ -292,7 +296,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 <Link
                   href="/gallery"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname === '/gallery' ? 'text-orange-500' : 'text-white hover:text-gray-300'}`}
+                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname === '/gallery' ? 'text-orange-500' : 'text-white hover:text-[#FE6700]'}`}
                 >
                   Gallery
                 </Link>
@@ -302,7 +306,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 <Link
                   href={getHref("about")}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname === '/about' ? 'text-orange-500' : 'text-white hover:text-gray-300'}`}
+                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname === '/about' ? 'text-orange-500' : 'text-white hover:text-[#FE6700]'}`}
                 >
                   About Us
                 </Link>
@@ -312,7 +316,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                 <Link
                   href="/contact-us"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname === '/contact-us' ? 'text-orange-500' : 'text-white hover:text-gray-300'}`}
+                  className={`text-[30px] font-light tracking-wide transition-colors block ${pathname === '/contact-us' ? 'text-orange-500' : 'text-white hover:text-[#FE6700]'}`}
                 >
                   Contact Us
                 </Link>
@@ -322,14 +326,14 @@ export default function Header({ onOpenBooking }: HeaderProps) {
             <motion.div variants={itemVariants} className="mt-auto w-full flex flex-col">
               <div className="w-full h-[1px] bg-white/20"></div>
               
-              <Link
+              {/* <Link
                 href={getHref("#shop")}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center w-full py-5 text-xl font-light tracking-wide text-white hover:text-gray-300 transition-colors"
+                className="flex items-center justify-center w-full py-5 text-xl font-light tracking-wide text-white hover:text-[#FE6700] transition-colors"
               >
                 <ShoppingCart size={22} strokeWidth={1.5} className="mr-3" />
                 Visit Shop
-              </Link>
+              </Link> */}
               
               <div className="w-full h-[1px] bg-white/20"></div>
               
@@ -338,7 +342,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
                   setIsMobileMenuOpen(false);
                   onOpenBooking();
                 }}
-                className="flex items-center justify-center w-full py-5 text-xl font-light tracking-wide text-white hover:text-gray-300 transition-colors cursor-pointer"
+                className="flex items-center justify-center w-full py-5 text-xl font-light tracking-wide text-white hover:text-[#FE6700] transition-colors cursor-pointer"
               >
                 Book Service Slot
                 <svg

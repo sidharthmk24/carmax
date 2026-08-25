@@ -9,6 +9,14 @@ import { motion, type Variants } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitText from "./shared/SplitText";
+import Button from "./shared/Button";
+
+const dummyVideos = [
+  { id: 1, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail1.png", speed: 0.1 },
+  { id: 2, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail2.png", speed: 0.14 },
+  { id: 3, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail3.png", speed: 0.1 },
+  { id: 4, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail4.png", speed: 0.14 },
+];
 
 const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -52,11 +60,10 @@ export default function Reviews() {
         );
       }
 
-      // Parallax speed for 6 video thumbnail cards
-      const speeds = [0.1, 0.14, 0.1, 0.14, 0.1, 0.14];
+      // Parallax speed for video thumbnail cards
       cardParallaxRefs.current.forEach((el, i) => {
         if (!el) return;
-        const speed = speeds[i] ?? 0.1;
+        const speed = dummyVideos[i]?.speed ?? 0.1;
         gsap.fromTo(
           el,
           { yPercent: -speed * 100 },
@@ -131,84 +138,78 @@ export default function Reviews() {
             textAlign="left"
           />
 
-          <button
-            className="group flex items-center gap-2 px-4 py-2 border border-white/40 hover:bg-white hover:text-black text-white font-medium text-sm transition-colors duration-300 cursor-pointer mt-6 md:mt-8"
+          <a
+            href="https://www.instagram.com/carmaxmlr/?hl=en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 md:mt-8 inline-block"
           >
-            View Gallery
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-transform duration-300 group-hover:translate-x-1"
+            <Button
+              variant="outlined"
+              rightIcon={
+                <span className="text-white group-hover:text-black inline-flex items-center transform group-hover:translate-x-1 transition-colors transition-transform duration-300">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                </span>
+              }
             >
-              <path d="M5 12h14"></path>
-              <path d="m12 5 7 7-7 7"></path>
-            </svg>
-          </button>
+              Visit Our Instagram Page
+            </Button>
+          </a>
         </div>
 
         {/* Left Side: Long Scrollable Staggered Video Grid (Desktop Only) */}
         <div className="hidden md:flex gap-6 sm:gap-16 w-full md:w-[58%] relative order-2 md:order-1 pb-16 md:pb-32">
-          {/* Column 1 (Three stacked videos) */}
+          {/* Column 1 (Even videos) */}
           <div className="flex flex-col gap-10 sm:gap-[7.5rem] w-1/2">
-            <VideoCard
-              variants={cardVariants}
-              aspect="aspect-[3/4]"
-              speed={0.1}
-              parallaxRef={(el) => {
-                cardParallaxRefs.current[0] = el;
-              }}
-            />
-            <VideoCard
-              variants={cardVariants}
-              aspect="aspect-[3/4]"
-              speed={0.1}
-              parallaxRef={(el) => {
-                cardParallaxRefs.current[2] = el;
-              }}
-            />
-            <VideoCard
-              variants={cardVariants}
-              aspect="aspect-[3/4]"
-              speed={0.1}
-              parallaxRef={(el) => {
-                cardParallaxRefs.current[4] = el;
-              }}
-            />
+            {dummyVideos.filter((_, i) => i % 2 === 0).map((video) => {
+              const globalIdx = dummyVideos.indexOf(video);
+              return (
+                <VideoCard
+                  key={video.id}
+                  variants={cardVariants}
+                  aspect="aspect-[9/16]"
+                  speed={video.speed}
+                  src={video.src}
+                  thumbnail={video.thumbnail}
+                  parallaxRef={(el) => {
+                    cardParallaxRefs.current[globalIdx] = el;
+                  }}
+                />
+              );
+            })}
           </div>
 
-          {/* Column 2 (Three taller, shifted stacked videos) */}
+          {/* Column 2 (Odd videos, shifted down) */}
           <div className="flex flex-col gap-10 sm:gap-[7.5rem] w-1/2 md:translate-y-24">
-            <VideoCard
-              variants={cardVariants}
-              aspect="aspect-[3/4]"
-              speed={0.14}
-              parallaxRef={(el) => {
-                cardParallaxRefs.current[1] = el;
-              }}
-            />
-            <VideoCard
-              variants={cardVariants}
-              aspect="aspect-[3/4]"
-              speed={0.14}
-              parallaxRef={(el) => {
-                cardParallaxRefs.current[3] = el;
-              }}
-            />
-            <VideoCard
-              variants={cardVariants}
-              aspect="aspect-[3/4]"
-              speed={0.14}
-              parallaxRef={(el) => {
-                cardParallaxRefs.current[5] = el;
-              }}
-            />
+            {dummyVideos.filter((_, i) => i % 2 !== 0).map((video) => {
+              const globalIdx = dummyVideos.indexOf(video);
+              return (
+                <VideoCard
+                  key={video.id}
+                  variants={cardVariants}
+                  aspect="aspect-[9/16]"
+                  speed={video.speed}
+                  src={video.src}
+                  thumbnail={video.thumbnail}
+                  parallaxRef={(el) => {
+                    cardParallaxRefs.current[globalIdx] = el;
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
 
@@ -235,16 +236,17 @@ export default function Reviews() {
             }}
             className="w-full !overflow-visible"
           >
-            {[1, 2, 3, 4, 5, 6].map((_, i) => (
-              <SwiperSlide key={i} className="h-auto flex items-center justify-center">
+            {dummyVideos.map((video) => (
+              <SwiperSlide key={video.id} className="h-auto flex items-center justify-center">
                 {({ isActive }) => (
                   <div
-                    className={`relative aspect-[7/12] w-full rounded-md overflow-hidden transition-all duration-500 shadow-2xl ${
+                    className={`relative aspect-[9/16] w-full rounded-md overflow-hidden transition-all duration-500 shadow-2xl ${
                       isActive ? "scale-100 opacity-100" : "scale-[0.85] opacity-40"
                     }`}
                   >
                     <video
-                      src="/video/cta.mp4"
+                      src={video.src}
+                      poster={video.thumbnail}
                       muted
                       loop
                       playsInline
@@ -303,12 +305,14 @@ export default function Reviews() {
 // Sub-component for the Video Thumbnail Cards
 interface VideoCardProps {
   variants: Variants;
-  aspect: string; // Tailwind aspect-[w/h] class — side cards vs. the taller hero card
+  aspect: string; // Tailwind aspect-[w/h] class
   speed: number; // 0–1, how far the thumbnail drifts inside its frame while scrolling
+  src: string; // Video source URL
+  thumbnail: string; // Thumbnail preview image URL
   parallaxRef: (el: HTMLDivElement | null) => void;
 }
 
-function VideoCard({ variants, aspect, speed, parallaxRef }: VideoCardProps) {
+function VideoCard({ variants, aspect, speed, src, thumbnail, parallaxRef }: VideoCardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -323,11 +327,7 @@ function VideoCard({ variants, aspect, speed, parallaxRef }: VideoCardProps) {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play()
-            .then(() => setIsPlaying(true))
-            .catch(() => setIsPlaying(false));
-        } else {
+        if (!entry.isIntersecting) {
           video.pause();
           setIsPlaying(false);
         }
@@ -338,6 +338,22 @@ function VideoCard({ variants, aspect, speed, parallaxRef }: VideoCardProps) {
     observer.observe(container);
     return () => observer.disconnect();
   }, []);
+
+  const handleMouseEnter = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.play()
+      .then(() => setIsPlaying(true))
+      .catch((err) => console.log("Video play failed: ", err));
+  };
+
+  const handleMouseLeave = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    video.currentTime = 0;
+    setIsPlaying(false);
+  };
 
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -389,6 +405,8 @@ function VideoCard({ variants, aspect, speed, parallaxRef }: VideoCardProps) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={`relative ${aspect} w-full max-w-[280px] rounded-sm overflow-hidden bg-zinc-900 group cursor-pointer shadow-2xl border border-white/10`}
     >
       {/* Parallax wrapper */}
@@ -402,7 +420,8 @@ function VideoCard({ variants, aspect, speed, parallaxRef }: VideoCardProps) {
       >
         <video
           ref={videoRef}
-          src="/video/cta.mp4"
+          src={src}
+          poster={thumbnail}
           muted
           loop
           playsInline

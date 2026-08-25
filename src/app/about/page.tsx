@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+// import Header from "@/components/Header";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
@@ -20,10 +21,10 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#000000] text-white flex flex-col font-sans select-none overflow-x-clip scroll-smooth">
       {/* Navbar Header */}
-      <Header onOpenBooking={openBooking} />
+      <Header  onOpenBooking={openBooking} />
 
       {/* Main Sections */}
-      <main className="flex-grow pt-24">
+      <main className="flex-grow ">
         <AboutHero />
         <AboutFeatures />
         <AboutWorkshopGlimpse />
@@ -33,7 +34,7 @@ export default function AboutPage() {
       </main>
 
       {/* Footer details */}
-      <Footer />
+      <Footer variant="ash" />
 
       {/* Booking Dialogue Modal */}
       <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />

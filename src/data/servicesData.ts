@@ -8,6 +8,7 @@ export interface Benefit {
   title: string;
   description: string;
   image: string;
+  compareImage?: string;
 }
 
 export interface ServiceData {
@@ -25,36 +26,37 @@ export const servicesData: ServiceData[] = [
   {
     slug: "engine-transmission",
     title: "Engine & Transmission",
-    subtitle: "Advanced diagnostic tools for lasting and trusted performance.",
+    subtitle: "Advanced internal repairs engineered for reliability and long-term efficiency. ",
     heroImage: "/services/engineHero.webp",
     subServices: [
       {
         title: "Mechanical Repairs",
-        description: "Comprehensive diagnostics to identify root-level issues, followed by precise corrective repairs. Our engineers use advanced tools and global-standard processes to ensure accuracy, durability, and dependable performance. ",
+        description: "Comprehensive diagnostics to identify root-level issues, followed by precise corrective repairs. Our engineers use advanced tools and global-standard processes to ensure accuracy, durability, and dependable performance.",
         image: "/services/engineservice1.webp",
       },
       {
-        title: "Engine Assembly",
+        title: "Engine Overhaul",
         description: "A complete internal rebuild of the engine, covering critical components such as pistons, crankshaft, valves, and sealing systems. Every element is carefully inspected, repaired, or replaced to restore original factory performance, efficiency, and long-term reliability. ",
         image: "/services/engineservice2.webp",
       },
       {
         title: "Transmission Overhaul",
-        description: "Detailed gearbox reconstruction carried out with precise calibration and tolerance settings. This ensures smooth gear transitions, optimal power transfer, and consistent performance under all driving conditions. ",
+        description: "Detailed gearbox reconstruction carried out with precise calibration and tolerance settings. This ensures smooth gear transitions, optimal power transfer, and consistent performance under all driving conditions.  ",
         image: "/services/engineservice3.webp",
       },
     ],
     benefitsTitle: "Benefits & Values",
     benefits: [
       {
-        title: "Precision Engineering",
+        title: "Precision Engineering ",
         description: "Every component is calibrated to exact tolerances for optimal performance.",
         image: "/services/enginebenifit1.webp",
       },
       {
         title: "Faster Turnaround",
         description: "Eliminates dependency on external workshops, ensuring quicker delivery.",
-        image: "/services/enginebenifit1.webp",
+        image: "/services/enginebenifit-before1.png",
+        compareImage: "/services/enginebenifit-after1.png",
       },
       {
         title: "Advanced Diagnostics",
@@ -99,6 +101,8 @@ export const servicesData: ServiceData[] = [
       },
       {
         title: "Better Handling Control",
+        compareImage: "/services/brakebenifit2.webp",
+
         description: "Optimized systems provide precise steering and road grip.",
         image: "/services/brakebenifit2.webp",
       },
@@ -158,13 +162,13 @@ export const servicesData: ServiceData[] = [
   },
   {
     slug: "paint-exterior-care",
-    title: "Paint & Exterior Care",
-    subtitle: "Advanced surface care designed for protection, gloss, and long-term durability.",
+    title: "Long-Term Paint Protection",
+    subtitle: "Protects against UV rays, dirt, and environmental contaminants.",
     heroImage: "/services/paintHero.webp",
     subServices: [
       {
-        title: "Automotive Paint Services",
-        description: "Factory-grade repainting, refinishing, and touch-ups executed with precise color matching, ensuring a seamless finish, uniform tone, and showroom-level appearance.",
+        title: "Enhanced Visual Appeal",
+        description: "Maintains a premium look for your car that stands out on the road.",
         image: "/services/paintservice1.webp",
       },
       {
@@ -179,12 +183,14 @@ export const servicesData: ServiceData[] = [
       {
         title: "Long-Term Paint Protection",
         description: "Maintains a premium look for your car that stands out on the road.",
-        image: "/services/paintbenifit1.webp",
+         image: "/services/washedcarbefore.png",
+        compareImage: "/services/washedcarafter.png",
       },
       {
         title: "Enhanced Visual Appeal",
         description: "9H hardness ceramic protection resistant to UV rays and environmental fallout.",
-        image: "/services/paintbenifit2.webp",
+        image: "/services/redcarbefore.png",
+        compareImage: "/services/redcarafter.png",
       },
       {
         title: "Surface Durability",

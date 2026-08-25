@@ -42,7 +42,7 @@ export default function BusinessHours() {
                   className="grid grid-cols-2 gap-16 max-w-[400px] mx-auto"
                 >
                   {/* Day name */}
-                  <div className="text-right text-zinc-300 font-light"><Typography variant="description" >{item.day}</Typography> </div>
+                  <div className="text-left md:text-right text-zinc-300 font-light"><Typography variant="description" >{item.day}</Typography> </div>
                   {/* Opening Hours */}
                   <div className="text-left text-zinc-500 font-light"><Typography variant="description" >{item.time}</Typography></div>
                 </div>

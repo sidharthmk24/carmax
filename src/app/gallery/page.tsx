@@ -9,15 +9,16 @@ import BookingModal from "@/components/BookingModal";
 import { AnimatePresence, motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
+import CompareSlider from "@/components/shared/CompareSlider";
 
 export default function GalleryPage() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Gallery");
   const [playingVideos, setPlayingVideos] = useState<Record<number, boolean>>({});
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [videoPrevEl, setVideoPrevEl] = useState<HTMLButtonElement | null>(null);
-  const [videoNextEl, setVideoNextEl] = useState<HTMLButtonElement | null>(null);
+  const [videoSwiperInstance, setVideoSwiperInstance] = useState<SwiperType | null>(null);
 
   const toggleVideo = (id: number) => {
     setPlayingVideos(prev => ({ ...prev, [id]: !prev[id] }));
@@ -31,26 +32,38 @@ export default function GalleryPage() {
   const openBooking = () => setIsBookingOpen(true);
   const closeBooking = () => setIsBookingOpen(false);
 
-  const images = [
+  type GalleryImage = 
+    | { id: number; title: string; type: "normal"; src: string }
+    | { id: number; title: string; type: "compare"; beforeSrc: string; afterSrc: string };
+
+  const images: GalleryImage[] = [
     {
       id: 1,
       title: "Bring back the old shine - Restoring a Ford Focus",
-      src: "/gallery/gallery1.png",
+      type: "compare",
+      beforeSrc: "/services/redcarafter.png",
+      afterSrc: "/services/redcarbefore.png",
     },
-    {
-      id: 2,
-      title: "BMW X3 Engine - Refurbishment",
-      src: "/gallery/gallery2.png",
-    },
+    // {
+    //   id: 2,
+    //   title: "BMW X3 Engine - Refurbishment",
+    //   type: "normal",
+    //   src: "/gallery/gallery2.png",
+    // },
     {
       id: 3,
       title: "Restoring perfection after a crash – Toyota RAV4 Panel Beating & Realignment",
-      src: "/gallery/gallery3.png",
+      type: "compare",
+      beforeSrc: "/services/enginebenifit-after1.png",
+      afterSrc: "/services/enginebenifit-before1.png",
     },
     {
       id: 4,
       title: "From Mud to Mirror Finish – Premium Exterior Detailing",
-      src: "/gallery/gallery4.png",
+      type: "compare",
+      beforeSrc: "/services/washedcarafter.png",
+      afterSrc: "/services/washedcarbefore.png",
+
     },
   ];
 
@@ -58,19 +71,19 @@ export default function GalleryPage() {
     {
       id: 101,
       title: "",
-      thumbnail: "/gallery/gallery1.png",
+      thumbnail: "/gallery/thumnail1.png",
       videoUrl: "/video/cta.mp4",
     },
     {
       id: 102,
       title: "",
-      thumbnail: "/gallery/gallery2.png",
+      thumbnail: "/gallery/thumnail2.png",
       videoUrl: "/video/cta.mp4",
     },
     {
       id: 103,
       title: "",
-      thumbnail: "/gallery/gallery3.png",
+      thumbnail: "/gallery/thumnail3.png",
       videoUrl: "/video/cta.mp4",
     },
   ];
@@ -79,19 +92,19 @@ export default function GalleryPage() {
     {
       id: 201,
       title: "",
-      thumbnail: "/gallery/gallery4.png",
+      thumbnail: "/gallery/videothumbnail.png",
       videoUrl: "/video/cta.mp4",
     },
     {
       id: 202,
       title: "",
-      thumbnail: "/gallery/gallery2.png",
+      thumbnail: "/gallery/videothumbnail.png",
       videoUrl: "/video/cta.mp4",
     },
     {
       id: 203,
       title: "",
-      thumbnail: "/gallery/gallery3.png",
+      thumbnail: "/gallery/videothumbnail.png",
       videoUrl: "/video/cta.mp4",
     },
   ];
@@ -99,7 +112,7 @@ export default function GalleryPage() {
   const currentVideos = activeTab === "Educational Videos" ? educationalVideos : testimonialVideos;
 
   return (
-    <main className="min-h-screen bg-[#1D1D1B] text-white flex flex-col font-sans">
+    <main className="min-h-screen bg-[#1D1D1B] text-white flex flex-col font-sans overflow-x-hidden">
       <Header onOpenBooking={openBooking} />
       
       <div className="flex-grow pt-32 pb-20">
@@ -112,7 +125,7 @@ export default function GalleryPage() {
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
             
             {/* Mobile Dropdown Menu (Mobile Only) */}
-            <div className="relative w-full lg:hidden mb-8 z-30">
+            <div className="relative w-full lg:hidden mb-8 z-50">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="w-full flex items-center justify-between px-4 py-3.5 border border-white/20 bg-transparent text-white text-[15px] font-light tracking-wide cursor-pointer"
@@ -192,16 +205,23 @@ export default function GalleryPage() {
                         
                         {/* Before/After Container */}
                         <div className="relative w-full aspect-[16/10] bg-[#1D1D1B] rounded-sm overflow-hidden mb-5">
-                          <Image 
-                            src={img.src} 
-                            alt={img.title} 
-                            fill 
-                            className="object-fill transition-transform duration-700 group-hover:scale-105"
-                            unoptimized
-                          />
+                          {img.type === "compare" ? (
+                            <CompareSlider
+                              beforeImage={img.beforeSrc}
+                              afterImage={img.afterSrc}
+                              alt={img.title}
+                              alwaysAnimateInView={true}
+                            />
+                          ) : (
+                            <Image 
+                              src={img.src} 
+                              alt={img.title} 
+                              fill 
+                              className="object-cover transition-transform duration-700 group-hover:scale-105"
+                              unoptimized
+                            />
+                          )}
                           
-                     
-
                           {/* Shadow overlay at bottom for text legibility */}
                           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent z-10 pointer-events-none"></div>
                         </div>
@@ -231,7 +251,7 @@ export default function GalleryPage() {
                         <div key={video.id} className="flex flex-col group">
                           
                           {/* Video Box */}
-                          <div className="relative aspect-[9/16] bg-[#1D1D1B] rounded-sm overflow-hidden mb-5 shadow-lg border border-white/5">
+                          <div className={`relative ${activeTab === "Customer Testimonials" ? "aspect-[9/16]" : "aspect-video"} bg-[#1D1D1B] rounded-sm overflow-hidden mb-5 shadow-lg border border-white/5`}>
                             {isPlaying ? (
                               <video
                                 src={video.videoUrl}
@@ -286,26 +306,15 @@ export default function GalleryPage() {
                   </div>
 
                   {/* Mobile Video Swiper (Mobile Only) */}
-                  <div className="block md:hidden w-full relative mt-4">
+                  <div className="block md:hidden w-full relative mt-4 overflow-x-hidden">
                     <Swiper
+                      key={activeTab}
                       modules={[Navigation]}
                       slidesPerView={1.3}
                       centeredSlides={true}
                       spaceBetween={8}
                       loop={true}
-                      navigation={{
-                        prevEl: videoPrevEl,
-                        nextEl: videoNextEl,
-                      }}
-                      onBeforeInit={(swiper) => {
-                        if (typeof swiper.params.navigation !== "boolean") {
-                          const navigation = swiper.params.navigation;
-                          if (navigation) {
-                            navigation.prevEl = videoPrevEl;
-                            navigation.nextEl = videoNextEl;
-                          }
-                        }
-                      }}
+                      onSwiper={setVideoSwiperInstance}
                       className="w-full !overflow-visible"
                     >
                       {currentVideos.map((video) => {
@@ -314,7 +323,7 @@ export default function GalleryPage() {
                           <SwiperSlide key={video.id} className="h-auto flex items-center justify-center">
                             {({ isActive }) => (
                               <div
-                                className={`relative aspect-[9/16] w-full rounded-md overflow-hidden transition-all duration-500 shadow-2xl ${
+                                className={`relative ${activeTab === "Customer Testimonials" ? "aspect-[9/16]" : "aspect-video"} w-full rounded-md overflow-hidden transition-all duration-500 shadow-2xl ${
                                   isActive ? "scale-100 opacity-100" : "scale-[0.85] opacity-40"
                                 }`}
                               >
@@ -364,16 +373,18 @@ export default function GalleryPage() {
                     {/* Mobile Swiper Navigation */}
                     <div className="flex items-center justify-center gap-4 mt-8 z-20">
                       <button
-                        ref={setVideoPrevEl}
+                        onClick={() => videoSwiperInstance?.slidePrev()}
                         className="w-12 h-12 flex items-center justify-center rounded-full border border-white text-white transition-all duration-300 z-10 cursor-pointer hover:bg-white/10"
+                        aria-label="Previous slide"
                       >
                         <svg width="19" height="17" viewBox="0 0 19 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M7.95618 0.999946L0.999661 8.30429L7.95618 15.6086M0.999661 8.30429L17.6953 8.3043" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
                       <button
-                        ref={setVideoNextEl}
+                        onClick={() => videoSwiperInstance?.slideNext()}
                         className="w-12 h-12 flex items-center justify-center rounded-full border border-white text-white transition-all duration-300 z-10 cursor-pointer hover:bg-white/10"
+                        aria-label="Next slide"
                       >
                         <svg width="19" height="17" viewBox="0 0 19 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M10.7391 15.6087L17.6957 8.30435L10.7391 1M17.6957 8.30435L1 8.30435" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

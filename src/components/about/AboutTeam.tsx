@@ -6,17 +6,45 @@ import Typography from "../Typography";
 
 import Image from "next/image";
 
-const teamMembers = Array(6).fill({
-  name: "Mr. Balachandra Nayak",
-  role: "Founder",
-});
+const teamMembers = [
+  {
+    name: "Balachandra Nayak",
+    role: "Founder",
+    image: "https://i.pravatar.cc/300?img=11",
+  },
+  {
+    name: "Vitesh C Nayak",
+    role: "Managing Director",
+    image: "https://i.pravatar.cc/300?img=12",
+  },
+  {
+    name: "Aisha Sharma",
+    role: "Service Manager",
+    image: "https://i.pravatar.cc/300?img=5",
+  },
+  {
+    name: "Rahul Verma",
+    role: "Lead Technician",
+    image: "https://i.pravatar.cc/300?img=13",
+  },
+  {
+    name: "Priya Patel",
+    role: "Customer Relations",
+    image: "https://i.pravatar.cc/300?img=20",
+  },
+  {
+    name: "Vikram Singh",
+    role: "Paint Specialist",
+    image: "https://i.pravatar.cc/300?img=15",
+  },
+];
 
 export default function AboutTeam() {
   return (
     <section className="py-2 bg-[#1D1D1B] text-white">
       <div className="container mx-auto px-4 lg:px-20 max-w-[1400px]">
         
-        <div className="flex flex-col items-center mb-16">
+        <div className="flex flex-col items-center mb-8 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -42,9 +70,10 @@ export default function AboutTeam() {
               {/* Image Placeholder */}
               <div className="w-[85%] md:w-[90%] aspect-square bg-[#1a1a1a] rounded-sm overflow-hidden relative">
                 <Image 
-                  src="/landingpage/aboutbg.webp" 
+                  src={member.image} 
                   alt={member.name} 
                   fill 
+                  unoptimized
                   className="object-cover transition-transform duration-500 group-hover:scale-105 opacity-80"
                 />
               </div>

@@ -14,11 +14,11 @@ interface HeroProps {
 const CAROUSEL_IMAGES = [
   {
     desktop: "/landingpage/herotest2.png",
-    mobile: "/landingpage/mobilecarousel1.webp",
+    mobile: "/landingpage/heroMobile.png",
   },
   {
     desktop: "/landingpage/herotest.webp",
-    mobile: "/landingpage/mobilecarousel2.webp",
+    mobile: "/landingpage/heroMobile2.png",
   }
 ];
 
@@ -142,7 +142,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
             {/* Mobile Book Service Button */}
             <motion.button
               onClick={() => onOpenBooking?.()}
-              className="mt-8 flex w-full md:hidden items-center justify-center gap-2 bg-white text-black py-4 px-6 font-semibold text-lg hover:bg-gray-100 transition-colors"
+              className="mt-8 flex w-full md:hidden items-center justify-center gap-2 bg-white text-black py-4 px-6 font-semibold text-lg hover:bg-gray-100 transition-colors rounded-sm"
             >
               Book Service Slot <ArrowUpRight className="w-5 h-5" />
             </motion.button>

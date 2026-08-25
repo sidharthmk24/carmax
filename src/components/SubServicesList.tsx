@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SubService } from "@/data/servicesData";
 import Typography from "./Typography";
+import Button from "./shared/Button";
 
 interface SubServicesListProps {
   subServices: SubService[];
@@ -67,27 +68,31 @@ export default function SubServicesList({ subServices, onOpenBooking }: SubServi
                   {sub.description}
                 </Typography>
                 {/* Booking Button matching design */}
-                <button
+                <Button
+                  variant="primary"
                   onClick={onOpenBooking}
-                  className="group flex items-center justify-center gap-1.5 bg-white text-black px-5 py-2.5 text-xs sm:text-sm font-semibold hover:bg-gray-100 transition-colors duration-300 cursor-pointer rounded-xs mt-5"
+                  className="mt-5 rounded-xs"
+                  rightIcon={
+                    <span className="text-black inline-flex items-center transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  }
                 >
                   Book Service Slot
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  >
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </button>
+                </Button>
               </div>
             </motion.div>
           ))}

@@ -36,7 +36,7 @@ export default function AboutTestimonial() {
         >
           {/* Placeholder Background */}
           <Image 
-            src="/landingpage/reviewbg.webp" 
+            src="/about/thumbnail.png" 
             alt="Testimonial Video" 
             fill 
             className="object-cover transition-transform duration-700 group-hover:scale-105" 
@@ -51,8 +51,6 @@ export default function AboutTestimonial() {
           </div>
         </motion.div>
 
-        {/* Bottom divider */}
-        <div className="w-full border-t border-white/10 mt-16"></div>
         
       </div>
     </section>

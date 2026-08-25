@@ -47,9 +47,9 @@ export default function Home() {
         initial={{ y: 80 }}
         whileInView={{ y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        viewport={{ once: false, amount: 0.05 }}
+        viewport={{ once: true, amount: 0.05 }}
       >
-        <Footer onOpenBooking={openBooking} />
+        <Footer  onOpenBooking={openBooking} />
       </motion.div>
 
       {/* Booking Dialogue Modal */}

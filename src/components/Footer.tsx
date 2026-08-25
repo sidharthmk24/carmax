@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import BookingModal from "./BookingModal";
+import Button from "./shared/Button";
 
 interface FooterProps {
   variant?: "black" | "ash";
@@ -24,7 +25,7 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
     { name: "Services", href: "/services" },
     { name: "Gallery", href: "/gallery" },
     { name: "About Us", href: "/about" },
-    { name: "Shop", href: "/#shop" },
+    // { name: "Shop", href: "/#shop" },
     { name: "Contact Us", href: "/contact-us" },
   ];
 
@@ -45,7 +46,7 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-0">
           
           {/* Left Column: Brand & Button */}
-          <div className="flex flex-col items-start gap-8">
+          <div className="flex flex-col items-start gap-8 w-full lg:w-auto">
             <Link href="/" className="flex items-center cursor-pointer hover:opacity-90 transition-opacity duration-200">
               <Image
                 src="/svgs/ftrlogo.svg"
@@ -58,27 +59,21 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
             </Link>
 
             {/* Book Service Slot Button — solid border, sharp corners, hover invert */}
-            <button 
+            <Button
+              variant="outlined"
               onClick={handleBookClick}
-              className="group flex items-center justify-center gap-2 border border-white bg-transparent text-white px-5 py-2.5 text-xs font-semibold tracking-wider hover:bg-white hover:text-black transition-all duration-300 cursor-pointer uppercase"
+              className="w-full lg:w-auto tracking-wider"
+              rightIcon={
+                <span className="text-white group-hover:text-black inline-flex items-center transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-colors transition-transform duration-300">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.429 9.23488L10.227 0.951625L1.94376 0.749594M10.227 0.951625L0.529551 10.6491" stroke="white" stroke-width="1.5"/>
+</svg>
+
+                </span>
+              }
             >
               Book Service Slot
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              >
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
-            </button>
+            </Button>
           </div>
 
           {/* Middle Columns: Nav + Services */}
@@ -93,7 +88,7 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
                   <li key={i}>
                     <Link
                       href={link.href}
-                      className="text-zinc-300 hover:text-white transition-colors duration-200 text-sm font-light"
+                      className="text-zinc-300 hover:text-[#FE6700] transition-colors duration-200 text-sm font-light"
                     >
                       {link.name}
                     </Link>
@@ -112,7 +107,7 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
                   <li key={i}>
                     <Link
                       href={link.href}
-                      className="text-zinc-300 hover:text-white transition-colors duration-200 text-sm font-light"
+                      className="text-zinc-300 hover:text-[#FE6700] transition-colors duration-200 text-sm font-light"
                     >
                       {link.name}
                     </Link>
@@ -128,7 +123,7 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
             <a
               href="#"
               aria-label="WhatsApp"
-              className="text-zinc-400 hover:text-white transition-colors duration-200"
+              className="text-zinc-400 hover:text-[#FE6700] transition-colors duration-200"
             >
               <svg
                 width="20"
@@ -147,9 +142,9 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
 
             {/* Instagram */}
             <a
-              href="#"
+              href="https://www.instagram.com/carmaxmlr/?hl=en"
               aria-label="Instagram"
-              className="text-zinc-400 hover:text-white transition-colors duration-200"
+              className="text-zinc-400 hover:text-[#FE6700] transition-colors duration-200"
             >
               <svg
                 width="20"
@@ -167,36 +162,24 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
               </svg>
             </a>
 
-            {/* LinkedIn */}
-            <a
-              href="#"
-              aria-label="LinkedIn"
-              className="text-zinc-400 hover:text-white transition-colors duration-200"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                <rect x="2" y="9" width="4" height="12" />
-                <circle cx="4" cy="4" r="2" />
-              </svg>
-            </a>
+           
           </div>
 
         </div>
 
         {/* Bottom Copyright Line */}
-        <div className="mt-16 pt-8 border-t border-zinc-900">
+        <div className="mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
           <p className="text-zinc-500 text-sm font-light tracking-wide">
             &reg; 2026-27 B&amp;C Carmax.
           </p>
+          <div className="flex items-center gap-6">
+            <Link href="/privacy-policy" className="text-zinc-500 hover:text-[#FE6700] text-sm font-light tracking-wide transition-colors duration-200">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-and-conditions" className="text-zinc-500 hover:text-[#FE6700] text-sm font-light tracking-wide transition-colors duration-200">
+              Terms &amp; Conditions
+            </Link>
+          </div>
         </div>
 
       </div>

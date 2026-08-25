@@ -68,14 +68,14 @@ export default function Services({ page }: { page?: string }) {
     {
       title: "Performance & Upgrades",
       slug: "performance-upgrades",
-      image: "/landingpage/service5.webp",
+      image: "/landingpage/newservice5.png",
       description: "Unleash the full potential of your vehicle with custom tuning, software calibrations, and modern aesthetic modifications.",
       subServices: ["Programming & Tuning", "Vehicle Facelifts & Modifications", "Exhaust & Intake Upgrades"],
     },
     {
       title: "Customer Support Services",
       slug: "customer-support",
-      image: "/landingpage/service6.webp",
+      image: "/landingpage/newservice6.png",
       description: "Enjoy stress-free servicing with our complimentary pickup and drop-off and dedicated 24/7 roadside assistance.",
       subServices: ["Free Pickup & Drop-off", "Roadside Assistance", "Service Consultation"],
     },
@@ -214,7 +214,8 @@ export default function Services({ page }: { page?: string }) {
                           : { duration: 0 }
                       }
                       onClick={() => handleServiceClick(service)}
-                      className="group relative w-full aspect-[9/14] sm:h-[520px] rounded-2xl md:rounded-sm overflow-hidden cursor-pointer bg-zinc-900"
+                      className="group relative w-full aspect-[9/14] sm:h-[520px] rounded-sm md:rounded-sm overflow-hidden cursor-pointer bg-transparent"
+                      style={{ WebkitMaskImage: "-webkit-radial-gradient(white, black)", transform: "translateZ(0)" }}
                     >
                     {/* Background Image */}
                     <Image

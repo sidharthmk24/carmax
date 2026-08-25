@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import Typography from "@/components/Typography";
 import SplitText from "@/components/shared/SplitText";
 
@@ -79,25 +79,24 @@ export default function ServiceHero({ title, subtitle, heroImage }: ServiceHeroP
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ delay: 0.8, duration: 0.8 }}
-        className="relative z-20 w-full flex items-center justify-center gap-1.5 pb-8 text-white select-none"
-      >
-        <div className="flex gap-[2px] opacity-70">
-          <ChevronDown className="w-3.5 h-3.5" />
-          <ChevronDown className="w-3.5 h-3.5" />
-        </div>
-        <span className="font-light text-xs text-white/90 tracking-wide">
-          Scroll to explore
-        </span>
-        <div className="flex gap-[2px] opacity-70">
-          <ChevronDown className="w-3.5 h-3.5" />
-          <ChevronDown className="w-3.5 h-3.5" />
-        </div>
-      </motion.div>
+      {/* Bottom Bar: Scroll Indicator */}
+      <div className="relative z-20 w-full container mx-auto px-4 sm:px-6 lg:px-20 pb-10 flex items-center justify-end">
+        <motion.button
+          onClick={() => window.scrollBy({ top: window.innerHeight, behavior: "smooth" })}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="group hidden md:flex items-center gap-2 text-white/90 hover:text-orange-500 transition-colors duration-300 font-medium text-sm tracking-wide cursor-pointer select-none"
+        >
+          <span>Scroll to Discover</span>
+          <motion.span
+            animate={{ y: [0, 5, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          >
+            <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+          </motion.span>
+        </motion.button>
+      </div>
     </section>
   );
 }

@@ -2,17 +2,17 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, animate, useInView } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Typography from "@/components/Typography";
 import SplitText from "@/components/shared/SplitText";
+import CompareSlider from "@/components/shared/CompareSlider";
 import { Benefit } from "@/data/servicesData";
 
 interface ServiceBenefitsProps {
   benefitsTitle?: string;
   benefits?: Benefit[];
 }
-
 export default function ServiceBenefits({ benefitsTitle = "Benefits", benefits = [] }: ServiceBenefitsProps) {
   const [activeBenefitIndex, setActiveBenefitIndex] = useState(0);
 
@@ -53,24 +53,40 @@ export default function ServiceBenefits({ benefitsTitle = "Benefits", benefits =
             <div className="flex flex-col w-full">
               {/* Image Container */}
               <div className="relative w-full aspect-[5/3] rounded-lg overflow-hidden bg-zinc-200">
-                <AnimatePresence mode="wait">
+                {benefits.map((benefit, idx) => {
+                  const isActive = activeBenefitIndex === idx;
+                  return (
                   <motion.div
-                    key={activeBenefitIndex}
+                    key={idx}
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    animate={{ opacity: isActive ? 1 : 0 }}
                     transition={{ duration: 0.4 }}
                     className="absolute inset-0 w-full h-full"
+                    style={{ 
+                      pointerEvents: isActive ? "auto" : "none",
+                      zIndex: isActive ? 10 : 0 
+                    }}
                   >
-                    <Image
-                      src={benefits[activeBenefitIndex]?.image || "/landingpage/carousel1.webp"}
-                      alt={benefits[activeBenefitIndex]?.title || benefitsTitle}
-                      fill
-                      className="object-cover"
-                      quality={85}
-                    />
+                    {benefit.compareImage ? (
+                      <CompareSlider 
+                        beforeImage={benefit.compareImage}
+                        afterImage={benefit.image}
+                        isActive={isActive}
+                        alt={benefit.title || benefitsTitle || "Benefit"}
+                      />
+                    ) : (
+                      <Image
+                        src={benefit.image || "/landingpage/carousel1.webp"}
+                        alt={benefit.title || benefitsTitle || "Benefit"}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover"
+                        quality={85}
+                        priority={idx === 0} // Preload the first image
+                      />
+                    )}
                   </motion.div>
-                </AnimatePresence>
+                )})}
               </div>
 
               {/* Active Benefit Title & Description Container */}
@@ -210,22 +226,48 @@ export default function ServiceBenefits({ benefitsTitle = "Benefits", benefits =
 
           {/* Right Column: Dynamic Transitioning Image */}
           <div className="lg:col-span-6 flex justify-center items-center">
-            <motion.div
-              key={activeBenefitIndex}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, ease: "easeOut" }}
-              className="relative w-full aspect-[5/3] rounded-md overflow-hidden"
-            >
-              <Image
-                src={activeImage}
-                alt={benefits[activeBenefitIndex]?.title || benefitsTitle}
-                fill
-                className="object-cover"
-                quality={85}
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-transparent" />
-            </motion.div>
+            <div className="relative w-full aspect-[5/3] rounded-md overflow-hidden bg-zinc-200">
+              {benefits.map((benefit, idx) => {
+                const isActive = activeBenefitIndex === idx;
+                return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.97 }}
+                  animate={{
+                    opacity: isActive ? 1 : 0,
+                    scale: isActive ? 1 : 0.97,
+                  }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  className="absolute inset-0 w-full h-full"
+                  style={{ 
+                    pointerEvents: isActive ? "auto" : "none",
+                    zIndex: isActive ? 10 : 0
+                  }}
+                >
+                  {benefit.compareImage ? (
+                    <CompareSlider 
+                      beforeImage={benefit.compareImage}
+                      afterImage={benefit.image}
+                      isActive={isActive}
+                      alt={benefit.title || benefitsTitle || "Benefit"}
+                    />
+                  ) : (
+                    <>
+                      <Image
+                        src={benefit.image || "/landingpage/carousel1.webp"}
+                        alt={benefit.title || benefitsTitle || "Benefit"}
+                        fill
+                        sizes="50vw"
+                        className="object-cover"
+                        quality={85}
+                        priority={idx === 0}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-transparent pointer-events-none" />
+                    </>
+                  )}
+                </motion.div>
+              )})}
+            </div>
           </div>
         </div>
       </div>

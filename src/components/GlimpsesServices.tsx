@@ -6,19 +6,22 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Typography from "./Typography";
 import SplitText from "./shared/SplitText";
+import Button from "./shared/Button";
+import CompareSlider from "./shared/CompareSlider";
 
 interface ServiceTab {
   name: string;
   slug: string;
-  beforeImg: string;
+  beforeImg?: string;
+  afterImg?: string;
 }
 
 const serviceTabs: ServiceTab[] = [
   {
     name: "Engine & Transmission",
     slug: "engine-transmission",
-    beforeImg: "/services/glimpses1.png",
-    
+    beforeImg: "/services/engineafter.png",
+     afterImg: "/services/enginebefore.png",
   },
   {
     name: "Brakes, AC & Suspension",
@@ -33,7 +36,8 @@ const serviceTabs: ServiceTab[] = [
   {
     name: "Paint & Exterior Care",
     slug: "paint-exterior-care",
-    beforeImg: "/services/glimpses4.png",
+    beforeImg: "/services/redcarafter.png",
+    afterImg: "/services/redcarbefore.png",
   },
   {
     name: "Performance & Upgrades",
@@ -85,7 +89,7 @@ export default function GlimpsesServices() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-6 md:gap-0">
           <SplitText
             text={
-              <Typography variant="subheading" className="text-white tracking-tight">
+              <Typography variant="subheading" className="text-white tracking-tight ">
                 Glimpses from Our Workshop
               </Typography>
             }
@@ -98,12 +102,23 @@ export default function GlimpsesServices() {
             to={{ opacity: 1, y: 0 }}
             threshold={0.1}
             rootMargin="-100px"
+            textAlign="left"
           />
 
-          <Link href="/gallery" className="group hidden lg:flex items-center gap-2 px-6 py-2.5 border border-white hover:bg-white hover:text-black text-white font-medium text-sm transition-colors duration-300 cursor-pointer whitespace-nowrap self-start md:self-auto uppercase tracking-wider">
-            View our Gallery <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.75056 15.3147L16.7148 8.00217L9.75056 0.689666M16.7148 8.00217L0.000555558 8.00217" stroke="currentColor" strokeWidth="2"/>
-            </svg>
+          <Link href="/gallery" className="hidden lg:block self-start md:self-auto">
+            <Button
+              variant="outlined"
+              className="whitespace-nowrap uppercase tracking-wider"
+              rightIcon={
+                <span className="text-white group-hover:text-black inline-flex items-center transform group-hover:translate-x-1 transition-colors transition-transform duration-300">
+                  <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.75056 15.3147L16.7148 8.00217L9.75056 0.689666M16.7148 8.00217L0.000555558 8.00217" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                </span>
+              }
+            >
+              View our Gallery
+            </Button>
           </Link>
         </div>
 
@@ -149,23 +164,25 @@ export default function GlimpsesServices() {
                   transition={{ duration: 0.4 }}
                   className="absolute inset-0 w-full h-full flex"
                 >
-                  {/* Before Image (Left 50%) */}
-                  <div className="relative w-full h-full overflow-hidden border-r border-white/10">
-                    <div className="absolute inset-y-0 left-0 w-full h-full">
+                  <div className="relative w-full h-full overflow-hidden">
+                    {activeTab.beforeImg && activeTab.afterImg ? (
+                      <CompareSlider
+                        beforeImage={activeTab.beforeImg}
+                        afterImage={activeTab.afterImg}
+                        alt={activeTab.name}
+                        alwaysAnimateInView={true}
+                      />
+                    ) : (
                       <Image
-                        src={activeTab.beforeImg}
-                        alt={`${activeTab.name} Before`}
+                        src={activeTab.beforeImg || activeTab.afterImg || ""}
+                        alt={activeTab.name}
                         fill
-                        className="object-fill object-left pointer-events-none select-none"
+                        className="object-cover"
                         unoptimized
                       />
-                    </div>
-              
+                    )}
                   </div>
 
-              
-
-                
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -221,8 +238,20 @@ export default function GlimpsesServices() {
 
             {/* Mobile-Only Bottom Navigation & Action Button */}
             <div className="flex lg:hidden items-center justify-between w-full mt-4">
-              <Link href="/gallery" className="px-6 py-3 border border-white/20 hover:border-white/50 text-white font-normal text-sm transition-all duration-300 cursor-pointer uppercase tracking-wider text-center shrink-0">
-                View our Gallery
+              <Link href="/gallery" className="shrink-0">
+                <Button
+                  variant="outlined"
+                  className="whitespace-nowrap uppercase tracking-wider"
+                  rightIcon={
+                    <span className="text-white group-hover:text-black inline-flex items-center transform group-hover:translate-x-1 transition-colors transition-transform duration-300">
+                      <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.99665 12.5173L13.7109 6.51733L7.99665 0.517333M13.7109 6.51733L-0.00334827 6.51733" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    </span>
+                  }
+                >
+                  View our Gallery
+                </Button>
               </Link>
               
               <div className="flex items-center gap-3">

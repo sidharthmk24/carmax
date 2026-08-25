@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitText from "./shared/SplitText";
+import Button from "./shared/Button";
 import Typography from "./Typography";
 
 interface Project {
@@ -16,94 +17,73 @@ interface Project {
   position: "left" | "center" | "right";
   parallaxSpeed: number; // 0–1 — how far the image drifts inside its frame while scrolling
   className: string;      // Specific margin offsets to match the pixel-perfect design
+  caption?: string;
 }
 
 // 6 workshop images: first 3 match the design photo perfectly, next 3 are staggered randomly
 const projects: Project[] = [
   {
     id: 1,
-    image: "/landingpage/gallery1.webp",
+    image: "/gallery/gal1.png",
     hasPlay: false,
     position: "left",
     parallaxSpeed: 0.12,
     className: "md:mt-0",
+    caption: "Crystal clear headlights restored to a bright, sharp, showroom finish",
   },
   {
     id: 2,
-    image: "/landingpage/gallery2.webp",
+    image: "/gallery/gal3.png",
     hasPlay: false,
     position: "center",
     parallaxSpeed: 0.18,
     className: "md:mt-[117%]",
+    caption: "Premium exterior detailing with a glossy finish and professionally restored wheels.",
   },
   {
     id: 3,
-    image: "/landingpage/gallery3.webp",
+    image: "/gallery/gal2.png",
     hasPlay: false, // play button overlay matching the photo
     position: "right",
     parallaxSpeed: 0.15,
     className: "md:mt-[41.5%]",
+    caption: "Deep exterior detailing restores the paint’s gloss, sharpens the finish, and enhances the vehicle’s overall presence.",
   },
   {
     id: 4,
-    image: "/gallery/gallery1.png",
+    image: "/gallery/gal4.png",
     hasPlay: false,
     position: "left",
     parallaxSpeed: 0.12,
     className: "md:mt-[120%]",
+    caption: "Off road modifications with a rugged bumper, upgraded lighting, and all terrain tires for enhanced capability and a bold stance.",
   },
   {
     id: 5,
-    image: "/gallery/gallery2.png",
+    image: "/gallery/gal5.png",
     hasPlay: false,
     position: "center",
     parallaxSpeed: 0.18,
     className: "md:mt-[110%]",
+    caption: "Glossy exterior detailing with a deep polished finish, restoring the bodywork and enhancing the tail light clarity.",
   },
   {
     id: 6,
-    image: "/gallery/gallery3.png",
+    image: "/gallery/gal6.png",
     hasPlay: false,
     position: "right",
     parallaxSpeed: 0.15,
     className: "md:mt-[135%]",
+    caption: "Premium exterior detailing with a deep gloss finish, refined wheels, and enhanced overall appearance.",
   },
 ];
 
-// Dynamic clip-path logic for the specific reveal directions
-const getClipVariants = (position: Project["position"]) => {
-  const baseTransition = {
-    duration: 1.2,
-    ease: [0.77, 0, 0.175, 1] as [number, number, number, number],
-  };
 
-  switch (position) {
-    case "left":
-      return {
-        hidden: { clipPath: "inset(0% 100% 0% 0%)" },
-        visible: { clipPath: "inset(0% 0% 0% 0%)", transition: baseTransition },
-      };
-    case "right":
-      return {
-        hidden: { clipPath: "inset(0% 0% 0% 100%)" },
-        visible: { clipPath: "inset(0% 0% 0% 0%)", transition: baseTransition },
-      };
-    case "center":
-      return {
-        hidden: { clipPath: "inset(0% 50% 0% 50%)" },
-        visible: { clipPath: "inset(0% 0% 0% 0%)", transition: baseTransition },
-      };
-    default:
-      return {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: baseTransition },
-      };
-  }
-};
 
 export default function ViewGallery() {
   const sectionRef = useRef<HTMLElement>(null);
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const revealRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -128,6 +108,29 @@ export default function ViewGallery() {
           }
         );
       });
+
+      revealRefs.current.forEach((el, i) => {
+        if (!el || !projects[i]) return;
+        const pos = projects[i].position;
+        let clipStart = "inset(0% 50% 0% 50%)";
+        if (pos === "left") clipStart = "inset(0% 100% 0% 0%)";
+        if (pos === "right") clipStart = "inset(0% 0% 0% 100%)";
+
+        gsap.fromTo(
+          el,
+          { clipPath: clipStart },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 1.0, // Snappier duration
+            ease: "power3.out", // Immediate start ease, no lag feeling
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%", // Triggers slightly earlier
+              toggleActions: "play none none none"
+            }
+          }
+        );
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -140,51 +143,71 @@ export default function ViewGallery() {
 
   const renderCard = (project: Project) => {
     const idx = projects.indexOf(project);
+    let initialClip = "inset(0% 50% 0% 50%)";
+    if (project.position === "left") initialClip = "inset(0% 100% 0% 0%)";
+    if (project.position === "right") initialClip = "inset(0% 0% 0% 100%)";
+
     return (
-      <motion.div
-        key={project.id}
-        variants={getClipVariants(project.position)}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
-        className={`relative aspect-[5/3] w-full overflow-hidden group shadow-lg ${project.className}`}
-      >
-        {/* Parallax wrapper */}
+      <div key={project.id} className={`flex flex-col gap-4 ${project.className}`}>
         <div
           ref={(el) => {
-            parallaxRefs.current[idx] = el;
+            revealRefs.current[idx] = el;
           }}
-          className="absolute left-0 w-full"
-          style={{
-            top: `-${project.parallaxSpeed * 100}%`,
-            height: `${100 + project.parallaxSpeed * 200}%`,
-          }}
+          className={`relative aspect-[5/3] w-full overflow-hidden group shadow-lg`}
+          style={{ clipPath: initialClip, willChange: "clip-path" }}
         >
-          <Image
-            src={project.image}
-            alt={`Workshop image ${project.id}`}
-            fill
-            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-            unoptimized
-          />
-        </div>
-
-        {/* Video Play Button Overlay */}
-        {project.hasPlay && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1D1D1B]/10 group-hover:bg-[#1D1D1B]/30 transition-colors duration-500 cursor-pointer">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="white"
-                className="w-8 h-8 sm:w-10 sm:h-10 ml-1 opacity-90"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
+          {/* Parallax wrapper */}
+          <div
+            ref={(el) => {
+              parallaxRefs.current[idx] = el;
+            }}
+            className="absolute left-0 w-full"
+            style={{
+              top: `-${project.parallaxSpeed * 100}%`,
+              height: `${100 + project.parallaxSpeed * 200}%`,
+            }}
+          >
+            <Image
+              src={project.image}
+              alt={`Workshop image ${project.id}`}
+              fill
+              className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              unoptimized
+            />
           </div>
+
+          {/* Video Play Button Overlay */}
+          {project.hasPlay && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1D1D1B]/10 group-hover:bg-[#1D1D1B]/30 transition-colors duration-500 cursor-pointer">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  className="w-8 h-8 sm:w-10 sm:h-10 ml-1 opacity-90"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {project.caption && (
+          <SplitText 
+            text={project.caption}
+            className="text-gray-300 font-light text-md md:text-lg leading-relaxed max-w-[95%] !text-left  "
+            splitType="words"
+            delay={40}
+            duration={0.6}
+            ease="power3.out"
+            from={{ opacity: 0, y: 20 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.1}
+            rootMargin="-50px"
+          />
         )}
-      </motion.div>
+      </div>
     );
   };
 
@@ -220,19 +243,24 @@ export default function ViewGallery() {
             rootMargin="-100px"
           />
 
-          <Link
-            href="/gallery"
-            className="group hidden md:flex items-center gap-2 px-6 py-2.5 border border-white/80 hover:bg-white hover:text-black text-white font-normal text-sm transition-colors duration-300 cursor-pointer mt-8"
-          >
-            View our Gallery 
-            <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.99665 12.5173L13.7109 6.51733L7.99665 0.517333M13.7109 6.51733L-0.00334827 6.51733" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
+          <Link href="/gallery" className="mt-8 hidden md:block">
+            <Button
+              variant="outlined"
+              rightIcon={
+                <span className="text-white group-hover:text-black inline-flex items-center transform group-hover:translate-x-1 transition-colors transition-transform duration-300">
+                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.99665 12.5173L13.7109 6.51733L7.99665 0.517333M13.7109 6.51733L-0.00334827 6.51733" stroke="currentColor" strokeWidth="1.5"/>
+                  </svg>
+                </span>
+              }
+            >
+              View our Gallery
+            </Button>
           </Link>
         </motion.div>
 
         {/* Staggered Masonry-style Floating Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-10 md:pb-32">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-10 md:pb-0">
           {/* Column 1 */}
           <div className="flex flex-col gap-6 md:gap-0">
             {col1.map((project) => renderCard(project))}
@@ -251,14 +279,20 @@ export default function ViewGallery() {
 
         {/* Mobile Full-width Button */}
         <div className="flex md:hidden w-full pb-6">
-          <Link
-            href="/gallery"
-            className="group flex w-full items-center justify-center gap-2 py-4 px-6 border border-white/80 hover:bg-white hover:text-black text-white font-normal text-sm transition-colors duration-300 cursor-pointer"
-          >
-            View our Gallery 
-            <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.99665 12.5173L13.7109 6.51733L7.99665 0.517333M13.7109 6.51733L-0.00334827 6.51733" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
+           <Link href="/gallery" className="mt-8 w-full">
+            <Button
+              variant="outlined"
+              className="w-full"
+              rightIcon={
+                <span className="text-white group-hover:text-black inline-flex items-center transform group-hover:translate-x-1 transition-colors transition-transform duration-300">
+                  <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.99665 12.5173L13.7109 6.51733L7.99665 0.517333M13.7109 6.51733L-0.00334827 6.51733" stroke="currentColor" strokeWidth="1.5"/>
+                  </svg>
+                </span>
+              }
+            >
+              View our Gallery
+            </Button>
           </Link>
         </div>
       </div>

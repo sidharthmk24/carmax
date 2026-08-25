@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { useScroll, useMotionValueEvent } from "framer-motion";
+import { useInView } from "framer-motion";
 import Typography from "@/components/Typography";
 import SplitText from "@/components/shared/SplitText";
+import Button from "@/components/shared/Button";
 
 /* ─── Config ─── */
-const TOTAL_FRAMES = 50;
-const SECTION_H    = 400; // vh — long enough for a comfortable scroll through all 50 frames
+const TOTAL_FRAMES = 76;
 
 function frameUrl(i: number) {
-  return `/video/video-frames/ezgif-frame-${String(i + 1).padStart(3, "0")}.jpg`;
+  return `/video/new-video-frames/ezgif-frame-${String(i + 1).padStart(3, "0")}.webp`;
 }
 
 /* ─── CTA Overlay — identical to CTASection ─── */
@@ -25,7 +25,7 @@ function CTAOverlay({
     <div
       className="absolute inset-0 z-10 flex items-start"
       style={{
-        paddingTop: "clamp(6rem, 14vw, 10rem)",
+        paddingTop: "clamp(2rem, 4vw, 3rem)",
         paddingLeft: "clamp(1.5rem, 5vw, 5rem)",
         opacity: visible ? 1 : 0,
         pointerEvents: visible ? "auto" : "none",
@@ -40,8 +40,8 @@ function CTAOverlay({
             <>
               <Typography variant="subheading" className="text-white">
                 Your one stop  <br className=" md:hidden" /> shop for
-                <br className="md:block hidden" />
-                360 <br className=" md:hidden" /> Car Solutions
+                <br className="md:block hidden" /> 
+                 360 <br className=" md:hidden" /> Car Solutions
               </Typography>
             </>
           }
@@ -59,32 +59,36 @@ function CTAOverlay({
         />
 
         {/* Same button as CTASection */}
-        <button
+        <Button
+          variant="primary"
           onClick={onBook}
-          className="group flex items-center justify-center gap-2 bg-white text-black px-6 py-3 font-semibold text-sm sm:text-base hover:bg-gray-100 transition-colors duration-300 mt-4 cursor-pointer"
+          className="mt-4"
           style={{
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(16px)",
             transition: "opacity 0.6s ease 0.45s, transform 0.6s ease 0.45s",
           }}
+          rightIcon={
+            <span className="text-black inline-flex items-center transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          }
         >
           Book Service Slot
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          >
-            <line x1="7" y1="17" x2="17" y2="7" />
-            <polyline points="7 7 17 7 17 17" />
-          </svg>
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -102,11 +106,8 @@ export default function FooterScroll({ onOpenBooking }: { onOpenBooking?: () => 
   const [loadPct, setLoadPct] = useState(0);
   const [showCTA, setShowCTA] = useState(false);
 
-  /* ── Framer scroll tracker ── */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
+  /* ── InView trigger ── */
+  const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
 
   /* ── Draw a frame onto the canvas ── */
   const drawFrame = useCallback((index: number) => {
@@ -162,47 +163,52 @@ export default function FooterScroll({ onOpenBooking }: { onOpenBooking?: () => 
     });
   }, [drawFrame]);
 
-  /* ── Scroll progress → frame index + CTA toggle ── */
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (!loaded) return;
+  /* ── Auto-play when in view ── */
+  useEffect(() => {
+    if (loaded && isInView && frameRef.current < TOTAL_FRAMES - 1) {
+      let animationId: number;
+      let lastTime = performance.now();
+      const fps = 24; // Adjust playback speed here
+      const frameInterval = 1000 / fps;
 
-    // Drive canvas frame
-    const target  = Math.round(latest * (TOTAL_FRAMES - 1));
-    const clamped = Math.max(0, Math.min(TOTAL_FRAMES - 1, target));
-    if (clamped !== frameRef.current) {
-      frameRef.current = clamped;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => drawFrame(clamped));
+      const playFrames = (currentTime: number) => {
+        if (currentTime - lastTime >= frameInterval) {
+          if (frameRef.current < TOTAL_FRAMES - 1) {
+            frameRef.current += 1;
+            drawFrame(frameRef.current);
+            lastTime = currentTime;
+
+            // Show CTA midway through animation
+            if (frameRef.current > TOTAL_FRAMES * 0.4) {
+              setShowCTA(true);
+            }
+          } else {
+            return; // Finished
+          }
+        }
+        animationId = requestAnimationFrame(playFrames);
+      };
+
+      animationId = requestAnimationFrame(playFrames);
+      return () => cancelAnimationFrame(animationId);
     }
-
-    // Show CTA once user has scrolled past 35% (mid-animation)
-    setShowCTA(latest >= 0.35);
-  });
+  }, [loaded, isInView, drawFrame]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative"
-      style={{ height: `${SECTION_H}vh` }}
+      className="relative w-full h-[100vh] overflow-hidden"
+      style={{ background: "#C07232" }}
       aria-label="B&C Carmax — Vehicle Restoration"
     >
-      {/* Sticky canvas viewport */}
-      <div
-        className="sticky top-0 w-full overflow-hidden"
-        style={{ height: "100vh", background: "#C07232" }}
-      >
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+        style={{ display: "block" }}
+      />
 
-        
-
-        {/* Canvas — draws the frame sequence */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
-          style={{ display: "block" }}
-        />
-
-        {/* CTA — fades in after 80% scroll */}
-        {loaded && <CTAOverlay visible={showCTA} onBook={onOpenBooking} />}
+      {/* CTA — fades in midway */}
+      {loaded && <CTAOverlay visible={showCTA} onBook={onOpenBooking} />}
 
         {/* Scroll cue — visible at the very start */}
         {/* {loaded && !showCTA && (
@@ -211,7 +217,6 @@ export default function FooterScroll({ onOpenBooking }: { onOpenBooking?: () => 
             <div className="w-px h-7 bg-white/30 animate-pulse" />
           </div>
         )} */}
-      </div>
     </section>
   );
 }
