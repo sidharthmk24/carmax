@@ -19,10 +19,19 @@ export default function ServiceCTA({ onOpenBooking }: ServiceCTAProps) {
       <div className="absolute inset-0 z-0">
         <Image
           // Ensure image_7a8904.jpg is placed in your /public folder
+          src="/services/servicemobilecta.png" 
+          alt="Premium BMW Showcase"
+          fill
+          className="object-cover object-center md:hidden block"
+          priority
+          unoptimized
+        />   
+          <Image
+          // Ensure image_7a8904.jpg is placed in your /public folder
           src="/services/commoncta.webp" 
           alt="Premium BMW Showcase"
           fill
-          className="object-cover object-center"
+          className="object-cover object-center hidden md:block"
           priority
           unoptimized
         />

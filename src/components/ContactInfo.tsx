@@ -23,7 +23,7 @@ export default function ContactInfo() {
               rel="noopener noreferrer" 
               className="text-zinc-400 hover:text-white transition-colors"
             >
-              7 Google Maps
+               Google Maps
             </a>
           </div>
           <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export default function ContactInfo() {
               href="tel:+917845304515" 
               className="text-zinc-400 hover:text-white transition-colors"
             >
-              +91 78453 04515
+              +91 99004 78121
             </a>
           </div>
           <div className="flex items-center gap-2">

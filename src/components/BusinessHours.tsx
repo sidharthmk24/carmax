@@ -6,13 +6,13 @@ import Typography from "./Typography";
 
 export default function BusinessHours() {
   const hours = [
-    { day: "Monday", time: "9:00 AM - 7:00 PM" },
-    { day: "Tuesday", time: "9:00 AM - 7:00 PM" },
-    { day: "Wednesday", time: "9:00 AM - 7:00 PM" },
-    { day: "Thursday", time: "9:00 AM - 7:00 PM" },
-    { day: "Friday", time: "9:00 AM - 7:00 PM" },
-    { day: "Saturday", time: "9:00 AM - 7:00 PM" },
-    { day: "Sunday", time: "Closed" },
+    { day: "Mon", time: "9:00 AM - 7:00 PM" },
+    { day: "Tue", time: "9:00 AM - 7:00 PM" },
+    { day: "Wed", time: "9:00 AM - 7:00 PM" },
+    { day: "Thu", time: "9:00 AM - 7:00 PM" },
+    { day: "Fri", time: "9:00 AM - 7:00 PM" },
+    { day: "Sat", time: "9:00 AM - 7:00 PM" },
+    { day: "Sun", time: "Closed" },
   ];
 
   return (

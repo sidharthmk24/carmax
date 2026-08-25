@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Orbitron, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import WhatsappChatWidget from "@/components/shared/WhatsappChatWidget";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${orbitron.variable} ${beVietnamPro.variable} h-full antialiased`}
     >
       <Script src="/smoothScroll/smoothScroll.js" />
-      <body className="min-h-full flex flex-col bg-[#1D1D1B] text-white font-sans">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#1D1D1B] text-white font-sans">
+        {children}
+        <WhatsappChatWidget />
+      </body>
     </html>
   );
 }

@@ -121,7 +121,9 @@ export default function Footer({ variant = "black", onOpenBooking }: FooterProps
           <div className="flex items-center gap-6 lg:pt-1">
             {/* WhatsApp */}
             <a
-              href="#"
+              href="https://wa.me/919900478121"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="WhatsApp"
               className="text-zinc-400 hover:text-[#FE6700] transition-colors duration-200"
             >

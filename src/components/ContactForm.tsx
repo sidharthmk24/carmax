@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import Typography from "@/components/Typography";
 import SplitText from "@/components/shared/SplitText";
 
@@ -20,10 +21,23 @@ export default function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const isEmailValid = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.phone.length === 10 &&
+    isEmailValid(formData.email) &&
+    formData.vehicleModel.trim() !== "" &&
+    formData.vehicleBrand.trim() !== "" &&
+    formData.serviceRequired !== "" &&
+    formData.message.trim() !== "" &&
+    formData.acceptPrivacy;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.acceptPrivacy) {
-      alert("Please accept the privacy policy to submit.");
+    if (!isFormValid) {
       return;
     }
     // Simulate submission
@@ -145,10 +159,18 @@ export default function ContactForm() {
                     required
                     placeholder="Enter your Phone Number"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                      setFormData({ ...formData, phone: val });
+                    }}
                     className="bg-transparent w-full focus:outline-none text-white px-4 py-3.5 text-sm font-sans font-light rounded-none"
                   />
                 </div>
+                {formData.phone.length > 0 && formData.phone.length < 10 && (
+                  <p className="text-[#ff5e00] text-xs mt-1.5 font-sans font-light">
+                    Phone number must be exactly 10 digits.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -286,7 +308,7 @@ export default function ContactForm() {
             <div className="text-center pt-4">
               <p className="text-zinc-500 font-sans font-light text-[11px] sm:text-xs leading-relaxed max-w-2xl mx-auto">
                 We&apos;re committed to your privacy. B&C Carmax uses the information you provide to contact you about our relevant content and services. For more information, check out our{" "}
-                <a href="#" className="underline text-zinc-400 hover:text-white transition-colors">Privacy Policy</a>.
+                <Link href="/privacy-policy" className="underline text-[#FE6700] hover:text-white transition-colors">Privacy Policy</Link>.
               </p>
             </div>
 
@@ -300,8 +322,8 @@ export default function ContactForm() {
                 onChange={(e) => setFormData({ ...formData, acceptPrivacy: e.target.checked })}
                 className="w-4 h-4 rounded-none border border-zinc-800 bg-transparent text-white focus:ring-0 focus:ring-offset-0 cursor-pointer accent-[#ff5e00]"
               />
-              <label htmlFor="acceptPrivacy" className="text-xs sm:text-sm text-zinc-400 font-sans font-light cursor-pointer hover:text-zinc-300 transition-colors">
-                I accept the <span className="underline">Privacy Policy</span>
+              <label htmlFor="acceptPrivacy" className="text-xs sm:text-sm text-zinc-400 font-sans font-light cursor-pointer hover:text-[#FE6700] transition-colors">
+                I accept the <Link href="/privacy-policy" className="underline hover:text-white transition-colors">Privacy Policy</Link>
               </label>
             </div>
 
@@ -309,7 +331,8 @@ export default function ContactForm() {
             <div className="flex justify-center pt-2">
               <button
                 type="submit"
-                className="bg-white text-black hover:bg-gray-200 transition-colors px-6 py-2.5 text-sm font-bold tracking-wide rounded-none cursor-pointer"
+                disabled={!isFormValid}
+                className="bg-white text-black hover:bg-gray-200 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed transition-colors px-6 py-2.5 text-sm font-bold tracking-wide rounded-none cursor-pointer"
               >
                 Send Enquiry
               </button>

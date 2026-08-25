@@ -11,6 +11,7 @@ import Reviews from "@/components/Reviews";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
 import FooterScroll from "@/components/FooterScroll";
+import ServiceCTA from "@/components/ServiceCTA";
 
 export default function Home() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -36,8 +37,11 @@ export default function Home() {
       
 
       {/* Scrollytelling — sits below the footer in z-stack */}
-      <div className="relative" style={{ zIndex: 1 }}>
+      <div className="relative hidden md:block" style={{ zIndex: 1 }}>
         <FooterScroll onOpenBooking={openBooking} />
+      </div>
+      <div className="md:hidden">
+ <ServiceCTA onOpenBooking={openBooking}/>
       </div>
 
       {/* Footer */}
