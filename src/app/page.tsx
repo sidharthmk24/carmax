@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import AboutUs from "@/components/AboutUs";
@@ -40,17 +39,13 @@ export default function Home() {
         <FooterScroll onOpenBooking={openBooking} />
       </div>
 
-      {/* Footer — slides UP over the canvas section (parallax) */}
-      <motion.div
+      {/* Footer */}
+      <div
         className="relative"
         style={{ zIndex: 20, marginTop: "-2px" }}
-        initial={{ y: 80 }}
-        whileInView={{ y: 0 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        viewport={{ once: true, amount: 0.05 }}
       >
         <Footer  onOpenBooking={openBooking} />
-      </motion.div>
+      </div>
 
       {/* Booking Dialogue Modal */}
       <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
