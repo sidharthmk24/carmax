@@ -10,32 +10,32 @@ const teamMembers = [
   {
     name: "Balachandra Nayak",
     role: "Founder",
-    image: "https://i.pravatar.cc/300?img=11",
+    image: "/landingpage/review2.png",
   },
   {
     name: "Vitesh C Nayak",
     role: "Managing Director",
-    image: "https://i.pravatar.cc/300?img=12",
+    image: "/landingpage/review2.png",
   },
   {
     name: "Aisha Sharma",
     role: "Service Manager",
-    image: "https://i.pravatar.cc/300?img=5",
+    image: "/landingpage/review2.png",
   },
   {
     name: "Rahul Verma",
     role: "Lead Technician",
-    image: "https://i.pravatar.cc/300?img=13",
+    image: "/landingpage/review2.png",
   },
   {
     name: "Priya Patel",
     role: "Customer Relations",
-    image: "https://i.pravatar.cc/300?img=20",
+    image: "/landingpage/review2.png",
   },
   {
     name: "Vikram Singh",
     role: "Paint Specialist",
-    image: "https://i.pravatar.cc/300?img=15",
+    image: "/landingpage/review2.png",
   },
 ];
 
