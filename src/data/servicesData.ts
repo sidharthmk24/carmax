@@ -101,8 +101,6 @@ export const servicesData: ServiceData[] = [
       },
       {
         title: "Better Handling Control",
-        compareImage: "/services/brakebenifit2.webp",
-
         description: "Optimized systems provide precise steering and road grip.",
         image: "/services/brakebenifit2.webp",
       },
