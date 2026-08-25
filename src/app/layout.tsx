@@ -17,6 +17,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
+  // metadataBase: new URL("https://carmaxmlr.com"),
   title: "B&C Carmax | Premium Car Detailing & Restoration Services",
   description: "Experience the ultimate showroom shine with B&C Carmax. Professional car detailing, interior restoration, ceramic coating, paint protection film (PPF), and performance upgrades.",
   openGraph: {

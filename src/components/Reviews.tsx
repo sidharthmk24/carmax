@@ -12,10 +12,10 @@ import SplitText from "./shared/SplitText";
 import Button from "./shared/Button";
 
 const dummyVideos = [
-  { id: 1, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail1.png", speed: 0.1 },
-  { id: 2, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail2.png", speed: 0.14 },
-  { id: 3, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail3.png", speed: 0.1 },
-  { id: 4, src: "/video/cta.mp4", thumbnail: "/gallery/thumnail4.png", speed: 0.14 },
+  { id: 1, src: "/video/cta.mp4", thumbnail: "/landingpage/review2.png", speed: 0.1 },
+  { id: 2, src: "/video/cta.mp4", thumbnail: "/landingpage/review2.png", speed: 0.14 },
+  { id: 3, src: "/video/cta.mp4", thumbnail: "/landingpage/review2.png", speed: 0.1 },
+  { id: 4, src: "/video/cta.mp4", thumbnail: "/landingpage/review2.png", speed: 0.14 },
 ];
 
 const cardVariants: Variants = {
