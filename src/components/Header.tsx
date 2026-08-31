@@ -50,7 +50,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  // const [scrollProgress, setScrollProgress] = useState(0);
   const pathname = usePathname();
 
   const isHome = pathname === "/";
@@ -74,13 +74,13 @@ export default function Header({ onOpenBooking }: HeaderProps) {
       lastScrollY = currentScrollY;
 
       // Calculate scroll progress percentage
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalScroll > 0) {
-        const pct = (currentScrollY / totalScroll) * 100;
-        setScrollProgress(pct);
-      } else {
-        setScrollProgress(0);
-      }
+      // const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      // if (totalScroll > 0) {
+      //   const pct = (currentScrollY / totalScroll) * 100;
+      //   setScrollProgress(pct);
+      // } else {
+      //   setScrollProgress(0);
+      // }
     };
 
     // Calculate initial progress
@@ -118,7 +118,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
       >
       
       {/* Pinned Scroll Progress Bar at the top of the header container */}
-      <div 
+      {/* <div 
         className={`max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 pointer-events-auto ${
           isScrolled || isMobileMenuOpen ? "pt-4" : "pt-6"
         }`}
@@ -129,7 +129,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
             style={{ width: `${scrollProgress}%` }}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Sliding Navigation Content Wrapper */}
       <div 

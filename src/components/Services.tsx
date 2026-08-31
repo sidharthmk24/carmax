@@ -233,13 +233,13 @@ export default function Services({ page }: { page?: string }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/10 z-10" />
 
                     {/* Hover/Active Orange Overlay */}
-                    <div
+                    {/* <div
                       className={`absolute inset-0 bg-[#ff5e00]/90 transition-opacity duration-500 z-20 ${
                         isActive
                           ? "opacity-100 md:opacity-0 md:group-hover:opacity-100"
                           : "opacity-0 group-hover:opacity-100"
                       }`}
-                    />
+                    /> */}
 
                     {/* Content Container */}
                     <div className="absolute inset-0 z-30 p-6 sm:p-8 flex flex-col justify-between">
