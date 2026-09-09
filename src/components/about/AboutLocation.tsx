@@ -37,7 +37,8 @@ export default function AboutLocation() {
           {/* Real Google Maps Iframe */}
           <div className="w-full max-w-5xl aspect-[4/3] md:aspect-[21/9] bg-[#1a1a1a] rounded-xl overflow-hidden relative">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.967812165036!2d74.8465942!3d12.8454238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a5cb3c82d5f%3A0xe54b9d031522f6d2!2sB%26C%20Carmax!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d972.4743911565453!2d74.86305542384173!3d12.849892246947025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35b0013e5dd51%3A0x62791678cd593536!2sCar%20Max!5e0!3m2!1sen!2sin!4v1788954700398!5m2!1sen!2sin"
+                 width="100%"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -53,7 +54,7 @@ export default function AboutLocation() {
           <div className="flex flex-row items-center justify-center gap-4 mt-8">
             <span className="text-white text-[14px] font-sans font-medium tracking-wide">Visit Us</span>
             <Link
-              href="https://maps.app.goo.gl/2L4Jc4r8aR6sXwVz9"
+              href="https://maps.app.goo.gl/US4i1GG45Jkq8ZrAA"
               target="_blank"
               rel="noopener noreferrer"
               className="flex flex-row items-center gap-2 text-[#a1a1aa] hover:text-white transition-colors tracking-wide"

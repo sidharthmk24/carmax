@@ -27,9 +27,9 @@ export default function AboutPage() {
       <main className="flex-grow ">
         <AboutHero />
         <AboutFeatures />
-        <AboutWorkshopGlimpse />
-        <AboutTeam />
-        <AboutTestimonial />
+        {/* <AboutWorkshopGlimpse /> */}
+        {/* <AboutTeam /> */}
+        {/* <AboutTestimonial /> */}
         <AboutLocation />
       </main>
 
