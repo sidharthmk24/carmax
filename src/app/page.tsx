@@ -31,7 +31,7 @@ export default function Home() {
         <Services />
         <TimedCarousel />
         <ViewGallery />
-        <Reviews />
+        {/* <Reviews /> */}
         {/* <CTASection /> */}
       </main>
       

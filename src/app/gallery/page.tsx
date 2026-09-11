@@ -67,46 +67,53 @@ export default function GalleryPage() {
     },
   ];
 
-  const educationalVideos = [
-    {
-      id: 101,
-      title: "",
-      thumbnail: "/gallery/thumnail1.png",
-      videoUrl: "/video/cta.mp4",
-    },
-    {
-      id: 102,
-      title: "",
-      thumbnail: "/gallery/thumnail2.png",
-      videoUrl: "/video/cta.mp4",
-    },
-    {
-      id: 103,
-      title: "",
-      thumbnail: "/gallery/thumnail3.png",
-      videoUrl: "/video/cta.mp4",
-    },
+  type GalleryVideo = {
+    id: number;
+    title: string;
+    thumbnail: string;
+    videoUrl: string;
+  };
+
+  const educationalVideos: GalleryVideo[] = [
+    // {
+    //   id: 101,
+    //   title: "",
+    //   thumbnail: "/gallery/thumnail1.png",
+    //   videoUrl: "/video/cta.mp4",
+    // },
+    // {
+    //   id: 102,
+    //   title: "",
+    //   thumbnail: "/gallery/thumnail2.png",
+    //   videoUrl: "/video/cta.mp4",
+    // },
+    // {
+    //   id: 103,
+    //   title: "",
+    //   thumbnail: "/gallery/thumnail3.png",
+    //   videoUrl: "/video/cta.mp4",
+    // },
   ];
 
-  const testimonialVideos = [
-    {
-      id: 201,
-      title: "",
-      thumbnail: "/gallery/videothumbnail.png",
-      videoUrl: "/video/cta.mp4",
-    },
-    {
-      id: 202,
-      title: "",
-      thumbnail: "/gallery/videothumbnail.png",
-      videoUrl: "/video/cta.mp4",
-    },
-    {
-      id: 203,
-      title: "",
-      thumbnail: "/gallery/videothumbnail.png",
-      videoUrl: "/video/cta.mp4",
-    },
+  const testimonialVideos: GalleryVideo[] = [
+    // {
+    //   id: 201,
+    //   title: "",
+    //   thumbnail: "/gallery/videothumbnail.webp",
+    //   videoUrl: "/video/cta.mp4",
+    // },
+    // {
+    //   id: 202,
+    //   title: "",
+    //   thumbnail: "/gallery/videothumbnail.webp",
+    //   videoUrl: "/video/cta.mp4",
+    // },
+    // {
+    //   id: 203,
+    //   title: "",
+    //   thumbnail: "/gallery/videothumbnail.webp",
+    //   videoUrl: "/video/cta.mp4",
+    // },
   ];
 
   const currentVideos = activeTab === "Educational Videos" ? educationalVideos : testimonialVideos;
@@ -152,7 +159,9 @@ export default function GalleryPage() {
                     transition={{ duration: 0.2 }}
                     className="absolute left-0 right-0 mt-1 bg-[#1D1D1B] border border-white/20 shadow-xl z-40"
                   >
-                    {["Gallery", "Educational Videos", "Customer Testimonials"].map((tab) => (
+                    {["Gallery", 
+                    "Educational Videos", "Customer Testimonials"
+                  ].map((tab) => (
                       <button
                         key={tab}
                         onClick={() => {

@@ -36,7 +36,7 @@ export default function AboutTestimonial() {
         >
           {/* Placeholder Background */}
           <Image 
-            src="/about/thumbnail.png" 
+            src="/about/thumbnail.webp" 
             alt="Testimonial Video" 
             fill 
             className="object-cover transition-transform duration-700 group-hover:scale-105" 

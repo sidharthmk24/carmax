@@ -33,7 +33,7 @@ export default function AboutWorkshopGlimpse() {
         >
           {/* Placeholder Background */}
           <Image 
-            src="/about/placeholder.png" 
+            src="/about/placeholder.webp" 
             alt="Workshop Glimpse" 
             fill 
             className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" 
