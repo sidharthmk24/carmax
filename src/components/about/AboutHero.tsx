@@ -55,7 +55,7 @@ export default function AboutHero() {
   );
 
   return (
-    <section className="relative w-full min-h-screen bg-[#141414] text-white flex flex-col justify-between pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden select-none">
+    <section className="relative w-full min-h-screen bg-[#1D1D1B] text-white flex flex-col justify-between pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden select-none">
       
       {/* Header Section */}
       <div className="w-full px-6 md:px-16 lg:px-24 mb-6 md:mb-10 text-center flex flex-col items-center">
